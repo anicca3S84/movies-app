@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/downloadFragment">
+
+    <fragment
+        android:id="@+id/downloadFragment"
+        android:name="com.codework.movies_app.fragments.DownloadFragment"
+        android:label="DownloadFragment"
+        tools:layout="@layout/fragment_download"/>
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.codework.movies_app.fragments.FavoriteFragment"
+        android:label="FavoriteFragment"
+        tools:layout="@layout/fragment_favorite"/>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.codework.movies_app.fragments.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.codework.movies_app.fragments.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"/>
+</navigation>

@@ -5,15 +5,41 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".activities.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <fragment
+        android:id="@+id/MainNavigationHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="@id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_graph" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/bg_nav"
+        android:elevation="0dp"
+        app:itemActiveIndicatorStyle="@null"
+        app:itemIconSize="20dp"
+        app:itemIconTint="@drawable/bg_item_bottom_nav"
+        app:itemPaddingBottom="25dp"
+        app:itemPaddingTop="10dp"
+        app:itemTextAppearanceActive="@style/MyTextAppearanceActive"
+        app:itemTextAppearanceInactive="@style/MyTextAppearanceInactive"
+        app:itemTextColor="@drawable/bg_item_bottom_nav"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:menu="@menu/menu_bottom_nav"
+        app:rippleColor="@color/g_white" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
