@@ -1,4 +1,4 @@
-package com.codework.movies_app.fragments
+package com.codework.movies_app.fragments.main_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -35,11 +35,13 @@
     <style name="MyTextAppearanceActive">
         <item name="android:textColor">#F23333</item>
         <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/poppins_thin</item>
     </style>
 
     <style name="MyTextAppearanceInactive">
         <item name="android:textColor">#F23333</item>
         <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/poppins_thin</item>
     </style>
 
     <dimen name="h4TextSize">35sp</dimen>

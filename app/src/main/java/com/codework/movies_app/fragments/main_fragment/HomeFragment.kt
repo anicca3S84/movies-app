@@ -1,21 +1,23 @@
-package com.codework.movies_app.fragments
+package com.codework.movies_app.fragments.main_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.codework.movies_app.databinding.FragmentDownloadBinding
+import com.codework.movies_app.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class DownloadFragment:Fragment() {
-    private lateinit var binding: FragmentDownloadBinding
+
+class HomeFragment: Fragment() {
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDownloadBinding.inflate(inflater)
+        binding = FragmentHomeBinding.inflate(inflater)
         return binding.root
     }
 

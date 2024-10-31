@@ -4,4 +4,21 @@
     <string name="txt_favorite">Yêu thích</string>
     <string name="txt_download">Tải về</string>
     <string name="txt_profile">Tôi</string>
+    <string name="tv_title_2">Download and watch offline\n whrere ever you where</string>
+    <string name="tv_title">Watch video in\nvisual reality</string>
+    <string name="tv_get_in">Get in</string>
+    <string name="tv_login">Đăng nhập</string>
+    <string name="tv_forgot_your_password">Quên mật khẩu?</string>
+    <string name="tv_password">Mật khẩu</string>
+    <string name="tv_email">Email</string>
+    <string name="tv_register_now">Chưa có tài khoản? Đăng ký ngay</string>
+    <string name="tv_register">Đăng ký</string>
+    <string name="tv_do_you_have_an_account">Đã có tài khoản? Đăng nhập</string>
+    <string name="tv_confirm_password">Xác nhận lại mật khẩu</string>
+    <string name="tv_username">Tên người dùng</string>
+    <string name="incident">Bạn gặp sự cố khi đăng nhập?</string>
+    <string name="introduction">Nhập email và chúng tôi sẽ gửi cho \nbạn một liên kết để truy cập lại vào tài khoản!</string>
+    <string name="tv_cancel">Hủy</string>
+    <string name="tv_send">Gửi</string>
+    <string name="reset_link_sent">Chúng tôi đã gửi link đặt lại mật khẩu đến email của bạn</string>
 </resources>
