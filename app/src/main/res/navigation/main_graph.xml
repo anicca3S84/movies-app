@@ -6,8 +6,8 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/downloadFragment"
-        android:name="com.codework.movies_app.fragments.main_fragment.DownloadFragment"
+        android:id="@+id/notificationFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.NotificationFragment"
         android:label="DownloadFragment"
         tools:layout="@layout/fragment_download"/>
     <fragment

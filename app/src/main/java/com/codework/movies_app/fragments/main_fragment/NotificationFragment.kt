@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codework.movies_app.databinding.FragmentDownloadBinding
 
-class DownloadFragment:Fragment() {
+class NotificationFragment:Fragment() {
     private lateinit var binding: FragmentDownloadBinding
 
     override fun onCreateView(

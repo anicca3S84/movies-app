@@ -48,6 +48,12 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
+        binding.notLogin.setOnClickListener{
+            val intent = Intent(requireActivity(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
         binding.tvForgotPassword.setOnClickListener{
             setupBottomSheetDialog { email ->
                 viewModel.resetPassword(email)
@@ -61,7 +67,7 @@ class LoginFragment : Fragment() {
                     when(it) {
                         is Resource.Loading ->  {}
                         is Resource.Success -> {
-                            Snackbar.make(requireView(),R.string.reset_link_sent, Snackbar.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), "Chúng tôi đã gửi link đặt lại\n mật khẩu đến email của bạn", Toast.LENGTH_LONG).show()
                         }
                         is Resource.Error -> {
                             Snackbar.make(requireView(),"Error ${it.message}", Snackbar.LENGTH_LONG).show()

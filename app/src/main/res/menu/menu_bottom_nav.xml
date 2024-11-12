@@ -11,9 +11,9 @@
         android:icon="@drawable/ic_favorite"/>
 
     <item
-        android:id="@+id/downloadFragment"
-        android:title="@string/txt_download"
-        android:icon="@drawable/ic_download"/>
+        android:id="@+id/notificationFragment"
+        android:title="@string/txt_notification"
+        android:icon="@drawable/ic_bell"/>
 
     <item
         android:id="@+id/profileFragment"

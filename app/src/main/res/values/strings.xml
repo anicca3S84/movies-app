@@ -15,10 +15,13 @@
     <string name="tv_register">Đăng ký</string>
     <string name="tv_do_you_have_an_account">Đã có tài khoản? Đăng nhập</string>
     <string name="tv_confirm_password">Xác nhận lại mật khẩu</string>
-    <string name="tv_username">Tên người dùng</string>
+    <string name="tv_username">Username</string>
     <string name="incident">Bạn gặp sự cố khi đăng nhập?</string>
     <string name="introduction">Nhập email và chúng tôi sẽ gửi cho \nbạn một liên kết để truy cập lại vào tài khoản!</string>
     <string name="tv_cancel">Hủy</string>
     <string name="tv_send">Gửi</string>
     <string name="reset_link_sent">Chúng tôi đã gửi link đặt lại mật khẩu đến email của bạn</string>
+    <string name="or">Hoặc</string>
+    <string name="tv_notlogin">Trải nghiệm không cần đăng nhập</string>
+    <string name="txt_notification">Thông báo</string>
 </resources>

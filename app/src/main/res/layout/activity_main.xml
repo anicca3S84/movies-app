@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom_nav"
-        app:rippleColor="@color/g_red" />
+        app:rippleColor="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
