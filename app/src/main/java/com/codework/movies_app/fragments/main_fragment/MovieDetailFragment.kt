@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.codework.movies_app.R
 import com.codework.movies_app.databinding.FragmentDetailsMovieBinding
 
 class MovieDetailFragment: Fragment() {
@@ -21,5 +23,9 @@ class MovieDetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.imgBack.setOnClickListener{
+            findNavController().navigateUp()
+        }
+
     }
 }
