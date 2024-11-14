@@ -29,14 +29,14 @@
     <string name="tvEditProfile">Chỉnh sửa trang cá nhân</string>
     <string name="tvList">Danh sách phim của tôi</string>
     <string name="tvHistory">Lịch sử xem</string>
-    <string name="tvLanguage">Ngôn ngữ</string>
+    <string name="tvLanguage">Ngôn ngữ:</string>
     <string name="tvQuestion">Câu hỏi thường gặp</string>
     <string name="general">Chung</string>
     <string name="tvLogout">Đăng xuất</string>
     <string name="version">Phiên bản 1.0</string>
     <string name="filmTitle">Nữ hoàng nước mắt Tập 1</string>
     <string name="tv_phone">Số điện thoại</string>
-    <string name="tv_gender">Giới tính</string>
+    <string name="tv_gender">Giới tính:</string>
     <string name="save">Lưu</string>
     <string name="tv_save">Lưu</string>
     <string name="myAccount">Tài khoản của tôi</string>
@@ -45,4 +45,8 @@
     <string name="genre">Thể loại:</string>
     <string name="tvYear">Năm SX:</string>
     <string name="summary">Kẻ Săn Lùng Sợ Hãi 3 xoay quanh cuộc chiến không ngừng giữa Trung sĩ Davis Tubbs và con quái vật Creeper, một thế lực đầy bí ẩn gieo rắc nỗi kinh hoàng cứ sau mỗi 23 năm. Với sự trở lại của ...</string>
+    <string name="tvDirectors">Đạo diễn:</string>
+    <string name="tvActors">Diễn viên:</string>
+    <string name="tvNations">Quốc gia:</string>
+    <string name="views">Lượt xem</string>
 </resources>

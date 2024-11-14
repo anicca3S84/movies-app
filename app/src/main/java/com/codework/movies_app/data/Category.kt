@@ -1,4 +1,7 @@
 package com.codework.movies_app.data
 
-class Category {
-}
+data class Category(
+    val id: Int,
+    val name: String,
+    val slug: String
+)
