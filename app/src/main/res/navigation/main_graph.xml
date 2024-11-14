@@ -19,10 +19,26 @@
         android:id="@+id/profileFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.codework.movies_app.fragments.settings.UserAccountFragment"
+        android:label="UserAccountFragment"
+        tools:layout="@layout/fragment_user_account">
+        <action
+            android:id="@+id/action_userAccountFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.codework.movies_app.data.User" />
+    </fragment>
 </navigation>

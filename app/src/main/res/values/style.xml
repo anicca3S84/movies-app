@@ -44,6 +44,9 @@
         <item name="fontFamily">@font/poppins_thin</item>
     </style>
 
+
+
+
     <dimen name="h4TextSize">35sp</dimen>
     <dimen name="h2TextSize">17sp</dimen>
     <dimen name="h3TextSize">22sp</dimen>

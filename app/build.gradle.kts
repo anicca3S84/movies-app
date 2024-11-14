@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.codework.movies_app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.codework.movies_app"
@@ -72,6 +72,12 @@ dependencies {
     implementation(libs.circleimageview)
 
     implementation(libs.material.v140)
+
+    // Moshi
+    implementation(libs.moshi.kotlin)
+
+    // Retrofit with Moshi Converter
+    implementation(libs.converter.moshi)
 
 }
 

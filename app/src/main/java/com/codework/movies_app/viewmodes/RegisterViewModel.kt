@@ -1,6 +1,8 @@
 package com.codework.movies_app.viewmodes
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codework.movies_app.utils.RegisterFieldState
@@ -8,6 +10,8 @@ import com.codework.movies_app.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.codework.movies_app.data.User
+import com.codework.movies_app.dto.UserDto
+import com.codework.movies_app.network.MarsApi
 import com.codework.movies_app.utils.Constants.USER_COLLECTION
 import com.codework.movies_app.utils.ValidationInfo
 import com.codework.movies_app.utils.validateConfirmPassword
@@ -33,7 +37,11 @@ class RegisterViewModel @Inject constructor(
     private val _validation = Channel<RegisterFieldState>()
     val validation = _validation.receiveAsFlow()
 
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String> = _status
+
     fun register(user: User, username: String, confirmPassword: String) {
+        Log.d("register","go hear")
         if (checkValidation(user, username, confirmPassword)) {
             viewModelScope.launch {
                 _register.emit(Resource.Loading())
@@ -41,10 +49,12 @@ class RegisterViewModel @Inject constructor(
             firebaseAuth.createUserWithEmailAndPassword(user.email, user.password)
                 .addOnSuccessListener { it ->
                     it.user?.let {
+                        Log.d("createUserWithEmailAndPassword", "Success")
                         saveUserInfo(it.uid, user)
                     }
                 }
                 .addOnFailureListener {
+                    Log.d("createUserWithEmailAndPassword", "Failed")
                     viewModelScope.launch {
                         _register.emit(Resource.Error(it.message.toString()))
                     }
@@ -64,6 +74,46 @@ class RegisterViewModel @Inject constructor(
 
     }
 
+    private fun getUserData(uid: String) {
+        db.collection(USER_COLLECTION)
+            .document(uid)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.d("getUserData", "Success")
+                val user = document.toObject(User::class.java)
+                if(user != null){
+                    postUserToApi(user, uid)
+                }else{
+                    viewModelScope.launch {
+                        _register.emit(Resource.Error("User not found"))
+                    }
+                    Log.d("getUserData", "Failed")
+
+                }
+            }
+            .addOnFailureListener { ex ->
+                viewModelScope.launch {
+                    _register.emit(Resource.Error(ex.message.toString()))
+                }
+            }
+    }
+
+    private fun postUserToApi(user: User, uid: String) {
+        Log.d("postUserToApi", "Go here")
+        viewModelScope.launch {
+            try {
+                val userDto = UserDto(uid, user.email, user.username)
+                val response = MarsApi.retrofitService.insertUser(userDto)
+                _status.value = "Success"
+                Log.d("postUserToApi", "Success\n${response.uid} ${response.email}, ${response.userName}")
+            }catch (e: Exception){
+                _status.value = "Failed"
+                Log.d("postUserToApi", e.message.toString())
+            }
+
+        }
+    }
+
     private fun saveUserInfo(uid: String, user: User) {
         db.collection(USER_COLLECTION)
             .document(uid)
@@ -73,6 +123,7 @@ class RegisterViewModel @Inject constructor(
                     _register.emit(Resource.Success(user))
                     Log.d("Save", "Success")
                 }
+                getUserData(uid)
             }
             .addOnFailureListener {
                 viewModelScope.launch {
