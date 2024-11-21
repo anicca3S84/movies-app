@@ -1,8 +1,13 @@
 package com.codework.movies_app.viewmodes
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codework.movies_app.data.User
+import com.codework.movies_app.utils.Constants.INTRODUCTION_SP
+import com.codework.movies_app.utils.Constants.USER_COLLECTION
 import com.codework.movies_app.utils.LoginFieldState
 import com.codework.movies_app.utils.RegisterFieldState
 import com.codework.movies_app.utils.Resource
@@ -13,18 +18,23 @@ import com.codework.movies_app.utils.validatePassword
 import com.codework.movies_app.utils.validateUserName
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    @ApplicationContext private val context: Context,
+    private val fireStore: FirebaseFirestore
 ) : ViewModel() {
     private val _login = MutableSharedFlow<Resource<FirebaseUser>>()
     val login = _login.asSharedFlow()
@@ -32,11 +42,9 @@ class LoginViewModel @Inject constructor(
     private val _resetPassword = MutableSharedFlow<Resource<String>>()
     val resetPassword = _resetPassword.asSharedFlow()
 
-    private val _token = MutableSharedFlow<Resource<String>>()
-    val token = _token.asSharedFlow()
-
     private val _validation = Channel<LoginFieldState>()
     val validation = _validation.receiveAsFlow()
+
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -50,16 +58,6 @@ class LoginViewModel @Inject constructor(
                     viewModelScope.launch {
                         it.user?.let {
                             _login.emit(Resource.Success(it))
-                            it.getIdToken(true).addOnCompleteListener { tokenTask ->
-                                if (tokenTask.isSuccessful) {
-                                    val idToken = tokenTask.result?.token
-                                    if (idToken != null) {
-                                        viewModelScope.launch {
-                                            _token.emit(Resource.Success(idToken))
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 }

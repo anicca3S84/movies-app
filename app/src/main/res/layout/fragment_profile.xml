@@ -156,7 +156,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rvHistory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -169,13 +169,13 @@
         app:layout_constraintTop_toBottomOf="@+id/layoutHistory" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutLanguage"
+        android:id="@+id/layoutEpisode"
         android:layout_width="0dp"
         android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+        app:layout_constraintTop_toBottomOf="@+id/rvHistory">
 
         <ImageView
             android:id="@+id/imgLanguage"
@@ -216,7 +216,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@+id/layoutLanguage">
+        app:layout_constraintTop_toBottomOf="@+id/layoutEpisode">
 
         <ImageView
             android:id="@+id/imgQuestion"
@@ -296,7 +296,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05109489" />
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

@@ -22,7 +22,8 @@
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment" />
+            app:destination="@id/userAccountFragment"
+            app:enterAnim="@anim/from_left" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -31,7 +32,11 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+            app:destination="@id/filmDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment"
+            app:enterAnim="@anim/from_bottom" />
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
@@ -40,18 +45,37 @@
         tools:layout="@layout/fragment_user_account">
         <action
             android:id="@+id/action_userAccountFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/from_right" />
         <argument
             android:name="user"
             app:argType="com.codework.movies_app.data.User" />
     </fragment>
     <fragment
-        android:id="@+id/movieDetailFragment"
-        android:name="com.codework.movies_app.fragments.main_fragment.MovieDetailFragment"
-        android:label="MovieDetailFragment"
-        tools:layout="@layout/fragment_details_movie">
+        android:id="@+id/filmDetailFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.FilmDetailFragment"
+        android:label="FilmDetailFragment"
+        tools:layout="@layout/fragment_film_detail">
         <action
-            android:id="@+id/action_movieDetailFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_filmDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/from_top" />
+        <action
+            android:id="@+id/action_filmDetailFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment"
+            app:enterAnim="@anim/from_bottom" />
+        <argument
+            android:name="slug"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_media_player"
+        android:id="@+id/mediaPlayerFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.MediaPlayerFragment"
+        android:label="MediaPlayerFragment" >
+        <action
+            android:id="@+id/action_mediaPlayerFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment"
+            app:enterAnim="@anim/from_top" />
     </fragment>
 </navigation>

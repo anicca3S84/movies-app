@@ -1,5 +1,6 @@
 package com.codework.movies_app.viewmodes
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,13 +13,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.codework.movies_app.data.User
 import com.codework.movies_app.dto.UserDto
 import com.codework.movies_app.network.MarsApi
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Constants.USER_COLLECTION
+import com.codework.movies_app.utils.Constants.saveUsername
 import com.codework.movies_app.utils.ValidationInfo
 import com.codework.movies_app.utils.validateConfirmPassword
 import com.codework.movies_app.utils.validateEmail
 import com.codework.movies_app.utils.validatePassword
 import com.codework.movies_app.utils.validateUserName
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _register = MutableStateFlow<Resource<User>>(Resource.Unspecified())
     val register = _register.asStateFlow()
@@ -37,8 +42,6 @@ class RegisterViewModel @Inject constructor(
     private val _validation = Channel<RegisterFieldState>()
     val validation = _validation.receiveAsFlow()
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String> = _status
 
     fun register(user: User, username: String, confirmPassword: String) {
         Log.d("register","go hear")
@@ -51,6 +54,7 @@ class RegisterViewModel @Inject constructor(
                     it.user?.let {
                         Log.d("createUserWithEmailAndPassword", "Success")
                         saveUserInfo(it.uid, user)
+
                     }
                 }
                 .addOnFailureListener {
@@ -82,6 +86,7 @@ class RegisterViewModel @Inject constructor(
                 Log.d("getUserData", "Success")
                 val user = document.toObject(User::class.java)
                 if(user != null){
+                    saveUsername(context, user.username)
                     postUserToApi(user, uid)
                 }else{
                     viewModelScope.launch {
@@ -104,10 +109,8 @@ class RegisterViewModel @Inject constructor(
             try {
                 val userDto = UserDto(uid, user.email, user.username)
                 val response = MarsApi.retrofitService.insertUser(userDto)
-                _status.value = "Success"
                 Log.d("postUserToApi", "Success\n${response.uid} ${response.email}, ${response.userName}")
             }catch (e: Exception){
-                _status.value = "Failed"
                 Log.d("postUserToApi", e.message.toString())
             }
 

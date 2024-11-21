@@ -49,4 +49,9 @@
     <string name="tvActors">Diễn viên:</string>
     <string name="tvNations">Quốc gia:</string>
     <string name="views">Lượt xem</string>
+    <string name="tvEpisode">Số tập:</string>
+    <string name="totalEpisodes">Trọn bộ</string>
+    <string name="defaultEpisode">Tập 01</string>
+    <string name="tvFav">Yêu thích</string>
+    <string name="listFav">Phim yêu thích</string>
 </resources>

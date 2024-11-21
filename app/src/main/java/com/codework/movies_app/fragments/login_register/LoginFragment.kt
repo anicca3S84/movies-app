@@ -1,5 +1,6 @@
 package com.codework.movies_app.fragments.login_register
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -83,6 +84,8 @@ class LoginFragment : Fragment() {
             val password = binding.edPassword.text.toString().trim()
             viewModel.login(email, password)
         }
+
+
 
 
         binding.apply {

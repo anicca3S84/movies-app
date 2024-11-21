@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.codework.movies_app.R
 import com.codework.movies_app.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +27,10 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.button.setOnClickListener{
+            val b = Bundle().apply { putString("slug", "truyen-thuyet-nang-nak")}
+            findNavController().navigate(R.id.action_homeFragment_to_movieDetailFragment, b)
+        }
     }
 
 

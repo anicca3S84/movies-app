@@ -4,5 +4,5 @@ data class Comment(
     val id: Int,
     val content: String,
     val username: String,
-    val createAt: String
+    val createdAt: String
 )

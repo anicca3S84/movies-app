@@ -20,11 +20,9 @@ private val retrofit = Retrofit.Builder()
 object MarsApi {
     val retrofitService: MarsApiService by lazy {
         try {
-            Log.d("MarsApi", "Initializing Retrofit...")
             retrofit.create(MarsApiService::class.java)
         } catch (e: Exception) {
-            Log.e("MarsApi", "Retrofit initialization failed", e)
-            throw e // Re-throw to propagate the error
+            throw e
         }
     }
 }

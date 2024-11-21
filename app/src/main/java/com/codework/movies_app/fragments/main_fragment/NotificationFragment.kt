@@ -20,15 +20,9 @@ class NotificationFragment:Fragment() {
         return binding.root
     }
 
-    private fun setUpFlag() {
-        requireActivity().window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpFlag()
+
     }
 }

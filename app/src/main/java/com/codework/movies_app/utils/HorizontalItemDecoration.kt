@@ -1,10 +1,9 @@
-package com.example.kelineyt.util
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class HorizontalItemDecoration(private val amount: Int = 15): RecyclerView.ItemDecoration() {
+class HorizontalItemDecoration(private val amount: Int = 30): RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -13,5 +12,6 @@ class HorizontalItemDecoration(private val amount: Int = 15): RecyclerView.ItemD
         state: RecyclerView.State
     ) {
         outRect.right = amount
+        outRect.bottom = amount
     }
 }

@@ -2,7 +2,7 @@ package com.codework.movies_app.data
 
 import com.squareup.moshi.Json
 
-data class Film (
+data class FilmDetail (
     val id: Int,
     val name: String,
     val slug: String,
