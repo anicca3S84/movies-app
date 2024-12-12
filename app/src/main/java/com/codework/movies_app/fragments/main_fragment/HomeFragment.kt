@@ -8,13 +8,14 @@ import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.codework.movies_app.R
+import com.codework.movies_app.adapters.HistoryAdapter
 import com.codework.movies_app.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
 class HomeFragment: Fragment() {
     private lateinit var binding: FragmentHomeBinding
-
+    private val historyAdapter by lazy { HistoryAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

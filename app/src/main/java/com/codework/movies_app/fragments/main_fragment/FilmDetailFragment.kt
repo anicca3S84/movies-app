@@ -41,8 +41,6 @@ class FilmDetailFragment : Fragment() {
     private val viewModel by viewModels<FilmDetailViewModel>()
     private val countViewModel by viewModels<SharedCountViewModel>()
     private val args by navArgs<FilmDetailFragmentArgs>()
-    private val favViewModel: FavoriteViewModel by viewModels()
-    private val favFilmAdapter: FavFilmAdapter by lazy { FavFilmAdapter() }
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
 
 
@@ -58,6 +56,7 @@ class FilmDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val slug = args.slug
+        Log.d("slug", "slug: $slug")
         slug.let {
             viewModel.getFilmDetailBySlug(it)
             observeFilmDetail(it)
@@ -200,6 +199,12 @@ class FilmDetailFragment : Fragment() {
         }
     }
 
+    private fun setUpCount() {
+        countViewModel.count.observe(viewLifecycleOwner) { count ->
+            Log.d("tvFavs", count.toString())
+        }
+    }
+
     private fun updateFavOnclick(slug: String) {
         var isColorChanged = false
         val username = Constants.getUsername(requireContext())
@@ -216,6 +221,7 @@ class FilmDetailFragment : Fragment() {
                     binding.imgFav.setColorFilter(
                         ContextCompat.getColor(requireContext(), R.color.g_red)
                     )
+                    setUpCount()
                     viewModel.addFavFilm(slug)
                     Toast.makeText(requireContext(), "Đã thích", Toast.LENGTH_SHORT).show()
                 }
@@ -232,10 +238,56 @@ class FilmDetailFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.filmDetail.collect { response ->
                 when (response) {
+                    is Resource.Loading -> {
+                        binding.apply {
+                            btnPlay.visibility =View.INVISIBLE
+                            progressBar2.visibility = View.VISIBLE
+                            tvFavs.visibility = View.INVISIBLE
+                            genre.visibility = View.INVISIBLE
+                            year.visibility = View.INVISIBLE
+                            episodes.visibility = View.INVISIBLE
+                            directors.visibility = View.INVISIBLE
+                            actors.visibility = View.INVISIBLE
+                            nation.visibility = View.INVISIBLE
+                            summary.visibility = View.INVISIBLE
+                            comment.visibility = View.INVISIBLE
+                            imgAvatar.visibility = View.INVISIBLE
+                            edtComment.visibility = View.INVISIBLE
+                            imgViews.visibility = View.INVISIBLE
+                            imgTime.visibility = View.INVISIBLE
+                            rvComment.visibility = View.INVISIBLE
+                            tvGeneral.visibility = View.INVISIBLE
+                            rvSameType.visibility = View.INVISIBLE
+                            imgStart.visibility = View.INVISIBLE
+                        }
+                    }
                     is Resource.Success -> {
+
                         binding.apply {
                             Glide.with(requireContext()).load(response.data?.thumbUrl)
                                 .into(imgPoster)
+                            imgStart.visibility = View.VISIBLE
+                            genre.visibility = View.VISIBLE
+                            year.visibility = View.VISIBLE
+                            episodes.visibility = View.VISIBLE
+                            directors.visibility = View.VISIBLE
+                            actors.visibility = View.VISIBLE
+                            nation.visibility = View.VISIBLE
+                            summary.visibility = View.VISIBLE
+                            comment.visibility = View.VISIBLE
+                            imgAvatar.visibility = View.VISIBLE
+                            edtComment.visibility = View.VISIBLE
+                            imgViews.visibility = View.VISIBLE
+                            imgTime.visibility = View.VISIBLE
+                            rvComment.visibility = View.VISIBLE
+                            tvGeneral.visibility = View.VISIBLE
+                            rvSameType.visibility = View.VISIBLE
+                            tvFavs.visibility = View.VISIBLE
+                            tvYear.text = response.data?.year.toString()
+                            tvFavs.text = response.data?.view.toString()
+                            btnPlay.visibility =View.VISIBLE
+                            progressBar2.visibility = View.INVISIBLE
+                            tvFavs.text = "2450"
                             tvFilmTitle.text = response.data?.name
                             tvActors.text = response.data?.actor?.joinToString(", ")
                             Log.d("actor", response.data?.actor.toString())

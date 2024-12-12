@@ -45,7 +45,7 @@ class ProfileViewModel @Inject constructor(
             try {
                 val response = MarsApi.retrofitService.getHistory(Constants.getUsername(context)!!)
                 _history.emit(Resource.Success(response))
-                Log.d("getHistory", "${response.items.size}")
+                Log.d("getHistory", "${response.items}")
             }catch (e: Exception){
                 _history.emit(Resource.Error(e.message.toString()))
                 Log.d("getHistory", "error: ${e.message}")

@@ -9,7 +9,7 @@
         android:id="@+id/notificationFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.NotificationFragment"
         android:label="DownloadFragment"
-        tools:layout="@layout/fragment_download"/>
+        tools:layout="@layout/fragment_notification"/>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.FavoriteFragment"

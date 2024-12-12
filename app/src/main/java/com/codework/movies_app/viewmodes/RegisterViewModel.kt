@@ -107,13 +107,12 @@ class RegisterViewModel @Inject constructor(
         Log.d("postUserToApi", "Go here")
         viewModelScope.launch {
             try {
-                val userDto = UserDto(uid, user.email, user.username)
+                val userDto = UserDto(uid, user.email, user.username,"")
                 val response = MarsApi.retrofitService.insertUser(userDto)
                 Log.d("postUserToApi", "Success\n${response.uid} ${response.email}, ${response.userName}")
             }catch (e: Exception){
                 Log.d("postUserToApi", e.message.toString())
             }
-
         }
     }
 

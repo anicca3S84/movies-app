@@ -88,7 +88,6 @@ class FilmDetailViewModel @Inject constructor(
         }
     }
 
-
     fun addFavFilm(slug: String) {
         viewModelScope.launch {
             try {
@@ -140,12 +139,15 @@ class FilmDetailViewModel @Inject constructor(
         }
     }
 
-
-
     fun getFilmDetailBySlug(slug: String) {
+
+        viewModelScope.launch {
+            _filmDetail.emit(Resource.Loading())
+        }
+
         viewModelScope.launch {
             try {
-                val response = MarsApi.retrofitService.getFilmDetail(slug)
+                val response = MarsApi.retrofitService.getFilmDetail(slug, Constants.getUsername(context)!!)
                 _filmDetail.emit(Resource.Success(response))
                 Log.d("getFilmDetailBySlug", "${response}")
 

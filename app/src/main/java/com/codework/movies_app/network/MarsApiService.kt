@@ -6,9 +6,11 @@ import com.codework.movies_app.data.Episode
 import com.codework.movies_app.data.Favorites
 import com.codework.movies_app.data.Item
 import com.codework.movies_app.data.FilmDetail
+import com.codework.movies_app.data.Notification
 import com.codework.movies_app.dto.UserDto
 import com.codework.movies_app.request.CommentRequest
 import com.codework.movies_app.request.FavoriteRequest
+import com.codework.movies_app.request.SaveTokenRequest
 import com.google.protobuf.Api
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -22,9 +24,12 @@ interface MarsApiService {
     @POST("/users/register")
     suspend fun insertUser(@Body userDto: UserDto): UserDto
 
+    @POST("/notification/saveToken")
+    suspend fun saveToken(@Body saveTokenRequest: SaveTokenRequest): String
+
     //film detail
     @GET("/danh-sach/phim/{slug}")
-    suspend fun getFilmDetail(@Path("slug") slug: String): FilmDetail
+    suspend fun getFilmDetail(@Path("slug") slug: String, @Query("username") username: String? = null): FilmDetail
 
     //film
     @GET("/danh-sach/filterByCategory/{category}")
@@ -33,7 +38,7 @@ interface MarsApiService {
     @GET("/danh-sach/filterByType/{type}")
     suspend fun getFilmsByType(@Path("type") type: String): ApiResponse
 
-    @GET("/episodes/film/list-episodes/{slug}")
+    @GET("/films/{slug}/episodes")
     suspend fun getLisEpisodesBySlug(@Path("slug") type: String): List<Episode>
 
     @POST("/danh-sach/addFavorite")
@@ -56,6 +61,14 @@ interface MarsApiService {
 
     @GET("/history/{username}")
     suspend fun getHistory(@Path("username") username: String): ApiResponse
+
+    @GET("/notification/unread/{userId}")
+    suspend fun getNotification(@Path("userId") userId: String): List<Notification>
+
+    @GET("/danh-sach/phim-moi-cap-nhat")
+    suspend fun getListNewFilms()
+
+
 
 
 

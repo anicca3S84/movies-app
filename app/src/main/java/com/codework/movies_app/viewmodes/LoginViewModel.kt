@@ -2,10 +2,15 @@ package com.codework.movies_app.viewmodes
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.http.HttpException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codework.movies_app.data.User
+import com.codework.movies_app.dto.UserDto
+import com.codework.movies_app.network.MarsApi
+import com.codework.movies_app.request.SaveTokenRequest
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Constants.INTRODUCTION_SP
 import com.codework.movies_app.utils.Constants.USER_COLLECTION
 import com.codework.movies_app.utils.LoginFieldState
@@ -28,6 +33,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,17 +60,22 @@ class LoginViewModel @Inject constructor(
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 //it ở cấp độ của addOnSuccessListener là AuthResult
                 //it trong let sẽ là một FirebaseUser
-                .addOnSuccessListener {
-                    viewModelScope.launch {
-                        it.user?.let {
-                            _login.emit(Resource.Success(it))
+                .addOnSuccessListener { authResult ->
+                    val firebaseUser = authResult.user
+                    firebaseUser?.getIdToken(true)
+                        ?.addOnSuccessListener { result ->
+                            val token = result.token
+                            viewModelScope.launch {
+                                _login.emit(Resource.Success(firebaseUser))
+                                Log.d("LoginToken", "Token: $token")
+                                pushTokenToApi(token)
+                            }
                         }
-                    }
-                }
-                .addOnFailureListener {
-                    viewModelScope.launch {
-                        _login.emit(Resource.Error(it.message.toString()))
-                    }
+                        ?.addOnFailureListener { tokenError ->
+                            viewModelScope.launch {
+                                _login.emit(Resource.Error("Token error: ${tokenError.message}"))
+                            }
+                        }
                 }
         }else{
             val loginFieldsState = LoginFieldState(
@@ -76,6 +87,28 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    private fun pushTokenToApi(token: String?) {
+        token?.let {
+            viewModelScope.launch {
+                try {
+                    val username = Constants.getUsername(context)!!
+                    Log.d("Username", username)
+                    Log.d("Token", token)
+                    val saveTokenRequest = SaveTokenRequest(username, token)
+                    val response = MarsApi.retrofitService.saveToken(saveTokenRequest)
+                    Log.d("pushTokenToApi", "Response: $response")
+                } catch (e: HttpException) {
+                    Log.e("pushTokenToApi", "HTTP error: ${e.message} ${e.message}")
+                } catch (e: IOException) {
+                    Log.e("pushTokenToApi", "Network error: ${e.message}")
+                } catch (e: Exception) {
+                    Log.e("pushTokenToApi", "Unexpected error: ${e.message}")
+                }
+            }
+        }
+    }
+
 
     fun resetPassword(email: String) {
         viewModelScope.launch {
