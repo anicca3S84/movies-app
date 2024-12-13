@@ -11,7 +11,17 @@ data class User(
     var imagePath: String = "",
     var phone: String = "",
     var gender: String = ""
+) : Parcelable {
+    // Hàm khởi tạo chính
+    constructor() : this("", "", "", "","","")
 
-): Parcelable {
-    constructor(): this("", "", "", "")
+    constructor(email: String, username: String, phone: String, gender: String) : this(
+        email,
+        username,
+        "",
+        "",
+        phone,
+        gender
+    )
+
 }
