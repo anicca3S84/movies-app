@@ -46,10 +46,19 @@ class NotificationFragment : Fragment() {
         setUpRefreshLayout()
         observeNotificationData()
 
+
+
         notificationAdapter.onLongClick = {
             viewModel.deleteNotification(it.id)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshNotifications()
+    }
+
+
 
     private fun observeNotificationData() {
         lifecycleScope.launch {

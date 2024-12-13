@@ -56,10 +56,10 @@ class ProfileFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         if(it.data?.items?.isNotEmpty() == true){
+                            historyAdapter.differ.submitList(it.data.items)
                             binding.rvHistory.visibility = View.VISIBLE
                         }else{
                             binding.rvHistory.visibility = View.GONE
-
                         }
                     }
                     else -> Unit

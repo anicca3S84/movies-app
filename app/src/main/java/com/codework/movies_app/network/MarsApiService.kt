@@ -11,11 +11,13 @@ import com.codework.movies_app.dto.UserDto
 import com.codework.movies_app.request.CommentRequest
 import com.codework.movies_app.request.FavoriteRequest
 import com.codework.movies_app.request.SaveTokenRequest
+import com.codework.movies_app.request.UpdateUserRequest
 import com.google.protobuf.Api
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -33,6 +35,13 @@ interface MarsApiService {
     ) : List<Item>
     @POST("/users/register")
     suspend fun insertUser(@Body userDto: UserDto): UserDto
+
+    @PUT("/users/{uid}")
+    suspend fun updateUser(
+        @Path("uid") uid: String,
+        @Query("email") email: String,
+        @Query("username") username: String
+    ): UpdateUserRequest
 
     @POST("/notification/saveToken")
     suspend fun saveToken(@Body saveTokenRequest: SaveTokenRequest): String

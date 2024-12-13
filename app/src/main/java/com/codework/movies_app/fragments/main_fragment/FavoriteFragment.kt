@@ -81,6 +81,13 @@ class FavoriteFragment: Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val username = Constants.getUsername(requireContext())!!
+        viewModel.getFavFilm(username)
+    }
+
+
 
     private fun setUpFavOnclick() {
         favFilmAdapter.onClick = {
