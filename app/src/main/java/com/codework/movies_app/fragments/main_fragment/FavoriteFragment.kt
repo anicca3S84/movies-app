@@ -49,12 +49,6 @@ class FavoriteFragment: Fragment() {
             detailViewModel.deleteFavFilm(film.slug)
             viewModel.getFavFilm(Constants.getUsername(requireContext())!!)
         }
-
-
-
-
-
-
     }
 
     private fun notifyListData() {

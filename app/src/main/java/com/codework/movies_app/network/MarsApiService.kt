@@ -68,6 +68,8 @@ interface MarsApiService {
     @GET("/danh-sach/phim-moi-cap-nhat")
     suspend fun getListNewFilms()
 
+    @DELETE("/notification/delete/{notificationId}")
+    suspend fun deleteNotification(@Path("notificationId") notificationId: Int)
 
 
 

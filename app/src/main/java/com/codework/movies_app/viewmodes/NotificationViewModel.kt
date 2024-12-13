@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codework.movies_app.data.Notification
 import com.codework.movies_app.network.MarsApi
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,17 +26,25 @@ class NotificationViewModel @Inject constructor(
     val notification = _notification.asStateFlow()
 
     init {
-        getUserIdAndFetchNotifications()
+        fetchNotifications()
     }
 
     private fun getUserId(): String? {
         return firebaseAuth.currentUser?.uid
     }
 
-    private fun getUserIdAndFetchNotifications() {
+    private fun fetchNotifications() {
         val userId = getUserId()
         if (userId != null) {
-            getNotification(userId)
+            viewModelScope.launch {
+                _notification.emit(Resource.Loading())
+                try {
+                    val response = MarsApi.retrofitService.getNotification(userId)
+                    _notification.emit(Resource.Success(response))
+                } catch (e: Exception) {
+                    _notification.emit(Resource.Error(e.message ?: "Error fetching notifications"))
+                }
+            }
         } else {
             viewModelScope.launch {
                 _notification.emit(Resource.Error("User not logged in"))
@@ -43,19 +52,19 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    private fun getNotification(userId: String) {
-        viewModelScope.launch {
-            _notification.emit(Resource.Loading())
-        }
+    fun refreshNotifications() {
+        fetchNotifications()
+    }
+
+    fun deleteNotification(id: Int) {
         viewModelScope.launch {
             try {
-                val response = MarsApi.retrofitService.getNotification(userId)
-                Log.d("getNotification", "Response: $response")
-                _notification.emit(Resource.Success(response))
+                MarsApi.retrofitService.deleteNotification(id)
+                refreshNotifications() // Refresh list after deletion
             } catch (e: Exception) {
-                _notification.emit(Resource.Error(e.message.toString()))
-                Log.d("getNotification", e.message.toString())
+                Log.e("deleteNotification", "Error: ${e.message}")
             }
         }
     }
 }
+

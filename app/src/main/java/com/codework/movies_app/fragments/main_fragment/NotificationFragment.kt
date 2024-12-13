@@ -1,6 +1,7 @@
 package com.codework.movies_app.fragments.main_fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codework.movies_app.adapters.CommentAdapter
 import com.codework.movies_app.adapters.NotificationAdapter
 import com.codework.movies_app.databinding.FragmentNotificationBinding
+import com.codework.movies_app.network.MarsApi
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.utils.VerticalItemDecoration
 import com.codework.movies_app.viewmodes.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -36,36 +42,53 @@ class NotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        observeViewModel()
         setUpRcv()
-    }
+        setUpRefreshLayout()
+        observeNotificationData()
 
-    private fun setUpRcv() {
-        binding.rvNotification.apply {
-            adapter = notificationAdapter
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(VerticalItemDecoration())
+        notificationAdapter.onLongClick = {
+            viewModel.deleteNotification(it.id)
         }
     }
 
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.notification.collect { resource ->
+    private fun observeNotificationData() {
+        lifecycleScope.launch {
+            viewModel.notification.collectLatest { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
-                        notificationAdapter.differ.submitList(resource.data)
+                        binding.progressBar.visibility = View.GONE
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        notificationAdapter.differ.submitList(resource.data) {
+                            notificationAdapter.notifyDataSetChanged()
+                        }
                     }
                     is Resource.Error -> {
-
+                        binding.progressBar.visibility = View.GONE
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                     }
                     else -> Unit
                 }
             }
         }
     }
+
+
+    private fun setUpRcv() {
+        binding.rvNotification.apply {
+            adapter = notificationAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(VerticalItemDecoration())
+        }
+    }
+
+    private fun setUpRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshNotifications()
+        }
+    }
 }
+
