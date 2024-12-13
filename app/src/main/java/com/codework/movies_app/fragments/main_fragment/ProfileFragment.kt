@@ -18,6 +18,7 @@ import com.codework.movies_app.activities.LoginRegisterActivity
 import com.codework.movies_app.adapters.HistoryAdapter
 import com.codework.movies_app.data.User
 import com.codework.movies_app.databinding.FragmentProfileBinding
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.viewmodes.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,12 @@ class ProfileFragment : Fragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val username = Constants.getUsername(requireContext())!!
+        viewModel.getHistory(username)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
