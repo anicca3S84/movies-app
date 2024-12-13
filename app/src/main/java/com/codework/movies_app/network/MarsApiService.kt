@@ -21,6 +21,16 @@ import retrofit2.http.Query
 
 interface MarsApiService {
     //user
+    @GET("/danh-sach/phim-moi-cap-nhat")
+    suspend fun getNewFilms(
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int,
+    ) : ApiResponse
+
+    @GET("/danh-sach/search")
+    suspend fun getSearchFilms(
+        @Query("keyword") keyword: String
+    ) : List<Item>
     @POST("/users/register")
     suspend fun insertUser(@Body userDto: UserDto): UserDto
 
