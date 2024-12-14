@@ -30,75 +30,79 @@
     </LinearLayout>
     <!-- Top Search Bar -->
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/HSV_linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <!-- Add child views (ImageView, TextView, etc.) here for the horizontal list -->
             <TextView
                 android:id="@+id/textChoice1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Đề xuất"
-                android:padding="8dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:background="@drawable/rounded_textview_background"/>
+                android:paddingHorizontal="8dp"
+                android:background="@drawable/rounded_textview_background" />
             <TextView
                 android:id="@+id/textChoice2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Phim bộ"
-                android:padding="8dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:paddingHorizontal="8dp"
                 android:background="@drawable/rounded_textview_background"/>
             <TextView
                 android:id="@+id/textChoice3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Phim lẻ"
-                android:padding="8dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:paddingHorizontal="8dp"
                 android:background="@drawable/rounded_textview_background"/>
             <TextView
                 android:id="@+id/textChoice4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Phiêu lưu"
-                android:padding="8dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:paddingHorizontal="8dp"
                 android:background="@drawable/rounded_textview_background"/>
             <TextView
                 android:id="@+id/textChoice5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Kinh dị"
-                android:padding="8dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:paddingHorizontal="8dp"
                 android:background="@drawable/rounded_textview_background"/>
             <TextView
                 android:id="@+id/textChoice6"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Viễn tưởng"
-                android:padding="8dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:paddingHorizontal="8dp"
                 android:background="@drawable/rounded_textview_background"/>
             <!-- Add more items as needed -->
 

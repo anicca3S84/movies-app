@@ -75,7 +75,10 @@ class ItemViewModel : ViewModel() {
             }
         }
     }
-//    fun isDataLoaded(): Boolean {
-//        return isDataLoaded
-//    }
+    fun isDataLoaded(): Boolean {
+        return isDataLoaded
+    }
+    fun changeData() {
+        isDataLoaded = !isDataLoaded
+    }
 }

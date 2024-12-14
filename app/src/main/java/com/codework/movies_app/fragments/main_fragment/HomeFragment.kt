@@ -10,6 +10,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -28,6 +30,7 @@ import com.codework.movies_app.data.Item
 import com.codework.movies_app.databinding.FragmentHomeBinding
 import com.codework.movies_app.viewmodes.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import org.w3c.dom.Text
 
 
 class HomeFragment: Fragment() {
@@ -36,12 +39,15 @@ class HomeFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var searchView: SearchView
+    private lateinit var horizontalScrollView: HorizontalScrollView
+    private lateinit var HSV_linearLayout: LinearLayout
     private lateinit var textChoice1: TextView
     private lateinit var textChoice2: TextView
     private lateinit var textChoice3: TextView
     private lateinit var textChoice4: TextView
     private lateinit var textChoice5: TextView
     private lateinit var textChoice6: TextView
+    private var downX: Float = 0f
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,12 +56,16 @@ class HomeFragment: Fragment() {
         binding = FragmentHomeBinding.inflate(inflater)
         recyclerView = binding.recyclerView
         searchView = binding.searchView
+        horizontalScrollView = binding.horizontalScrollView
+        HSV_linearLayout = binding.HSVLinearLayout
         textChoice1 = binding.textChoice1
         textChoice2 = binding.textChoice2
         textChoice3 = binding.textChoice3
         textChoice4 = binding.textChoice4
         textChoice5 = binding.textChoice5
         textChoice6 = binding.textChoice6
+        textChoice1.textSize = 24f
+        textChoice1.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
 //        recyclerView.itemAnimator = CustomItemAnimator()
         itemAdapter = ItemAdapter(emptyList(), this)
@@ -67,6 +77,7 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val rootView = binding.root
         rootView.setOnTouchListener{ v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
@@ -113,6 +124,8 @@ class HomeFragment: Fragment() {
                 Log.d("Load phim nhieu the loai:", "Failed!")
             }
         })
+        viewModel.getNewFilms(1, 50)
+
 //        if (!viewModel.isDataLoaded()) {
 //            viewModel.getNewFilms(1, 20)
 //        }
@@ -135,23 +148,38 @@ class HomeFragment: Fragment() {
                 return true
             }
         })
-//        textChoice1.setOnClickListener {
-//            textChoice1.textSize = 24f
-//            textChoice2.textSize = 18f
-//            textChoice3.textSize = 18f
-//            viewModel.getNewFilms(1, 20)
-//
-//        }
+
+
         textChoice1.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
+                    Log.d("keke downX:", downX.toString())
                     animateBackgroundColor(textChoice1, ContextCompat.getColor(requireContext(), R.color.g_blue_gray200))
                     true
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = Math.abs(event.x - downX)
+                    Log.d("keke deltaX;", deltaX.toString())
+                    if(deltaX != 0f) {
+                        false
+                    } else true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    animateBackgroundColor(textChoice1, ContextCompat.getColor(requireContext(), R.color.dark_color))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.d("keke event.x:", event.x.toString())
                     textChoice1.textSize = 24f
-                    textChoice2.textSize = 18f
-                    textChoice3.textSize = 18f
+                    textChoice1.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
+                    for ( i in 0 until HSV_linearLayout.childCount) {
+                        val child = HSV_linearLayout.getChildAt(i)
+                        if (child is TextView && child.id != textChoice1.id) {
+                            child.textSize = 18f
+                            child.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        }
+                    }
                     viewModel.getNewFilms(1, 20)
                     animateBackgroundColor(textChoice1, ContextCompat.getColor(requireContext(), R.color.dark_color))
                     true
@@ -162,14 +190,35 @@ class HomeFragment: Fragment() {
         textChoice2.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
+                    Log.d("keke downX:", downX.toString())
                     animateBackgroundColor(textChoice2, ContextCompat.getColor(requireContext(), R.color.g_blue_gray200))
                     true
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    textChoice1.textSize = 18f
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = Math.abs(event.x - downX)
+                    Log.d("keke downX:", downX.toString())
+                    Log.d("keke eventx:", event.x.toString())
+                    Log.d("keke deltaX;", deltaX.toString())
+                    if (deltaX != 0f) {
+                        false
+                    } else true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    animateBackgroundColor(textChoice2, ContextCompat.getColor(requireContext(), R.color.dark_color))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.d("keke eventX;", event.x.toString())
                     textChoice2.textSize = 24f
-                    textChoice3.textSize = 18f
-
+                    textChoice2.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
+                    for ( i in 0 until HSV_linearLayout.childCount) {
+                        val child = HSV_linearLayout.getChildAt(i)
+                        if (child is TextView && child.id != textChoice2.id) {
+                            child.textSize = 18f
+                            child.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        }
+                    }
                     viewModel.getSeries("Series")
                     animateBackgroundColor(textChoice2, ContextCompat.getColor(requireContext(), R.color.dark_color))
                     true
@@ -180,15 +229,33 @@ class HomeFragment: Fragment() {
         textChoice3.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
                     animateBackgroundColor(textChoice3, ContextCompat.getColor(requireContext(), R.color.g_blue_gray200))
                     true
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    textChoice1.textSize = 18f
-                    textChoice2.textSize = 18f
-                    textChoice3.textSize = 24f
-                    viewModel.getSeries("Movie")
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = Math.abs(event.x - downX)
+                    if (deltaX != 0f) {
+                        false
+                    } else true
+                }
+                MotionEvent.ACTION_CANCEL -> {
                     animateBackgroundColor(textChoice3, ContextCompat.getColor(requireContext(), R.color.dark_color))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                        textChoice3.textSize = 24f
+                        textChoice3.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
+                        for ( i in 0 until HSV_linearLayout.childCount) {
+                            val child = HSV_linearLayout.getChildAt(i)
+                            if (child is TextView && child.id != textChoice3.id) {
+                                child.textSize = 18f
+                                child.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                            }
+                        }
+                        viewModel.getSeries("Movie")
+                        animateBackgroundColor(textChoice3, ContextCompat.getColor(requireContext(), R.color.dark_color))
+
                     true
                 }
                 else -> false
@@ -197,16 +264,30 @@ class HomeFragment: Fragment() {
         textChoice4.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
                     animateBackgroundColor(textChoice4, ContextCompat.getColor(requireContext(), R.color.g_blue_gray200))
                     true
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    textChoice1.textSize = 18f
-                    textChoice2.textSize = 18f
-                    textChoice3.textSize = 18f
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = Math.abs(event.x - downX)
+                    if (deltaX != 0f) {
+                        false
+                    } else true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    animateBackgroundColor(textChoice4, ContextCompat.getColor(requireContext(), R.color.dark_color))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
                     textChoice4.textSize = 24f
-                    textChoice5.textSize = 18f
-                    textChoice6.textSize = 18f
+                    textChoice4.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
+                    for ( i in 0 until HSV_linearLayout.childCount) {
+                        val child = HSV_linearLayout.getChildAt(i)
+                        if (child is TextView && child.id != textChoice4.id) {
+                            child.textSize = 18f
+                            child.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        }
+                    }
                     viewModel.getCategories("phiêu lưu")
                     animateBackgroundColor(textChoice4, ContextCompat.getColor(requireContext(), R.color.dark_color))
                     true
@@ -217,16 +298,30 @@ class HomeFragment: Fragment() {
         textChoice5.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
                     animateBackgroundColor(textChoice5, ContextCompat.getColor(requireContext(), R.color.g_blue_gray200))
                     true
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    textChoice1.textSize = 18f
-                    textChoice2.textSize = 18f
-                    textChoice3.textSize = 18f
-                    textChoice4.textSize = 18f
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = Math.abs(event.x - downX)
+                    if (deltaX != 0f) {
+                        false
+                    } else true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    animateBackgroundColor(textChoice5, ContextCompat.getColor(requireContext(), R.color.dark_color))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
                     textChoice5.textSize = 24f
-                    textChoice6.textSize = 18f
+                    textChoice5.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
+                    for ( i in 0 until HSV_linearLayout.childCount) {
+                        val child = HSV_linearLayout.getChildAt(i)
+                        if (child is TextView && child.id != textChoice5.id) {
+                            child.textSize = 18f
+                            child.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        }
+                    }
                     viewModel.getCategories("kinh dị")
                     animateBackgroundColor(textChoice5, ContextCompat.getColor(requireContext(), R.color.dark_color))
                     true
@@ -237,16 +332,31 @@ class HomeFragment: Fragment() {
         textChoice6.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
                     animateBackgroundColor(textChoice6, ContextCompat.getColor(requireContext(), R.color.g_blue_gray200))
                     true
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    textChoice1.textSize = 18f
-                    textChoice2.textSize = 18f
-                    textChoice3.textSize = 18f
-                    textChoice4.textSize = 18f
-                    textChoice5.textSize = 18f
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = Math.abs(event.x - downX)
+                    if (deltaX != 0f) {
+
+                        false
+                    } else true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    animateBackgroundColor(textChoice6, ContextCompat.getColor(requireContext(), R.color.dark_color))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
                     textChoice6.textSize = 24f
+                    textChoice6.setTextColor(ContextCompat.getColor(requireContext(), R.color.n_green))
+                    for ( i in 0 until HSV_linearLayout.childCount) {
+                        val child = HSV_linearLayout.getChildAt(i)
+                        if (child is TextView && child.id != textChoice6.id) {
+                            child.textSize = 18f
+                            child.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        }
+                    }
                     viewModel.getCategories("viễn tưởng")
                     animateBackgroundColor(textChoice6, ContextCompat.getColor(requireContext(), R.color.dark_color))
                     true
@@ -254,25 +364,14 @@ class HomeFragment: Fragment() {
                 else -> false
             }
         }
-//        textChoice2.setOnClickListener {
-//            textChoice1.textSize = 18f
-//            textChoice2.textSize = 24f
-//            textChoice3.textSize = 18f
-//            viewModel.getSeries("Series")
-//        }
-//        textChoice3.setOnClickListener {
-//            textChoice1.textSize = 18f
-//            textChoice2.textSize = 18f
-//            textChoice3.textSize = 24f
-//            viewModel.getSeries("Movie")
-//        }
+
     }
     private fun animateBackgroundColor(view: View, color: Int) {
         val colorFrom = (view.background as? ColorDrawable)?.color ?: ContextCompat.getColor(requireContext(), R.color.dark_color)
         val colorTo = color
 
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
-        colorAnimation.duration = 300 // Thời gian chuyển đổi màu
+        colorAnimation.duration = 100 // Thời gian chuyển đổi màu
         colorAnimation.addUpdateListener { animator ->
             view.setBackgroundColor(animator.animatedValue as Int)
         }
