@@ -63,8 +63,8 @@ class ProfileFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         if(it.data?.items?.isNotEmpty() == true){
-                            historyAdapter.differ.submitList(it.data.items)
                             binding.rvHistory.visibility = View.VISIBLE
+                            historyAdapter.differ.submitList(it.data.items)
                         }else{
                             binding.rvHistory.visibility = View.GONE
                         }
@@ -118,6 +118,7 @@ class ProfileFragment : Fragment() {
                                 Intent(requireActivity(), LoginRegisterActivity::class.java)
                             startActivity(intent)
                             requireActivity().finish()
+                            binding.rvHistory.visibility = View.GONE
                         }
 
                         else -> Unit

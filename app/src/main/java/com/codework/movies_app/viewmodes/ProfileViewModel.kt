@@ -36,7 +36,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         checkUserStatus()
-        getHistory(Constants.getUsername(context)!!)
+        Constants.getUsername(context)?.let { getHistory(it) }
     }
 
      fun getHistory(username: String){
@@ -107,8 +107,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-
-
     fun logout() {
         if (auth.currentUser != null) {
             removeUsernameFromSharedPreferences()
@@ -118,11 +116,25 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun removeUsernameFromSharedPreferences() {
+        // Lấy SharedPreferences từ context
         val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+
+        // Xóa "username" khỏi SharedPreferences
         val editor = sharedPreferences.edit()
         editor.remove("username")
+
+        val username = sharedPreferences.getString("username", null)
+        Log.d("SharedPreferences", "Username sau khi xóa: $username")
+
+
+        // Kiểm tra xem editor có thực hiện thay đổi không
+        if (editor.commit()) {
+            Log.d("SharedPreferences", "Đã xóa username thành công. ")
+        } else {
+            Log.d("SharedPreferences", "Xóa username thất bại.")
+        }
+
         editor.apply()
     }
-
 
 }

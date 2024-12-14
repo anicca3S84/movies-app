@@ -95,6 +95,7 @@ class UserAccountViewModel @Inject constructor(
                         _updateInfo.emit(Resource.Success(user))
                         try {
                             val response = MarsApi.retrofitService.updateUser(auth.uid!!, user.email, user.username)
+
                             Log.d("_updateInfo", "Success: $response")
                         }catch (e: Exception) {
                             Log.e("_updateInfo", "Error: ${e.message}")
