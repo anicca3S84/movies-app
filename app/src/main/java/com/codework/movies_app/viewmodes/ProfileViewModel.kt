@@ -36,14 +36,14 @@ class ProfileViewModel @Inject constructor(
 
     init {
         checkUserStatus()
-        getHistory()
+        getHistory(Constants.getUsername(context)!!)
     }
 
-    private fun getHistory(){
+     fun getHistory(username: String){
         viewModelScope.launch {
             _history.emit(Resource.Loading())
             try {
-                val response = MarsApi.retrofitService.getHistory(Constants.getUsername(context)!!)
+                val response = MarsApi.retrofitService.getHistory(username)
                 _history.emit(Resource.Success(response))
                 Log.d("getHistory", "${response.items}")
             }catch (e: Exception){
@@ -109,9 +109,20 @@ class ProfileViewModel @Inject constructor(
 
 
 
-    fun logout(){
-        if(auth.currentUser != null)
+    fun logout() {
+        if (auth.currentUser != null) {
+            removeUsernameFromSharedPreferences()
             auth.signOut()
-        Log.d("Logout","success")
+            Log.d("Logout", "success")
+        }
     }
+
+    private fun removeUsernameFromSharedPreferences() {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("username")
+        editor.apply()
+    }
+
+
 }
