@@ -90,6 +90,9 @@ interface MarsApiService {
     @DELETE("/notification/delete/{notificationId}")
     suspend fun deleteNotification(@Path("notificationId") notificationId: Int)
 
+    @PUT("/notification/read/{notificationId}")
+    suspend fun markNotificationAsRead(@Path("notificationId") notificationId: Int)
+
 
 
 

@@ -22,23 +22,41 @@
            app:layout_constraintStart_toStartOf="@+id/guideline1"
            app:layout_constraintTop_toTopOf="parent" />
 
-       <TextView
-           android:id="@+id/tvFilmTitle"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="30dp"
-
-           app:layout_constraintStart_toEndOf="@id/guideline1"
-           app:layout_constraintTop_toTopOf="parent" />
 
        <androidx.recyclerview.widget.RecyclerView
            android:id="@+id/rvNotification"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
            android:layout_marginTop="16dp"
+           android:visibility="visible"
            app:layout_constraintEnd_toStartOf="@+id/guideline2"
            app:layout_constraintStart_toStartOf="@+id/guideline1"
            app:layout_constraintTop_toBottomOf="@+id/tvNotification" />
+
+       <ImageView
+           android:id="@+id/imageEmptyBox"
+           android:layout_width="120dp"
+           android:visibility="gone"
+           android:layout_height="120dp"
+           app:tint="@color/g_blue_gray200"
+           android:layout_marginTop="212dp"
+           android:src="@drawable/ic_empty_box"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"/>
+
+       <TextView
+           android:textColor="@color/g_blue_gray200"
+           android:textSize="18sp"
+           android:layout_marginTop="10dp"
+           android:id="@+id/tvEmptyNotification"
+           android:layout_width="0dp"
+           android:gravity="center"
+           android:visibility="gone"
+           android:layout_height="wrap_content"
+           app:layout_constraintEnd_toEndOf="@id/guideline2"
+           app:layout_constraintStart_toStartOf="@id/guideline1"
+           app:layout_constraintTop_toBottomOf="@+id/imageEmptyBox" />
 
        <androidx.constraintlayout.widget.Guideline
            android:id="@+id/guideline1"

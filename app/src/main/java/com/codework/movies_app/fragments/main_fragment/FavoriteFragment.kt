@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codework.movies_app.R
 import com.codework.movies_app.adapters.FavFilmAdapter
 import com.codework.movies_app.databinding.FragmentFavoriteBinding
 import com.codework.movies_app.utils.Constants
@@ -45,11 +47,20 @@ class FavoriteFragment: Fragment() {
         setUpFavRcv()
         notifyListData()
 
+        favFilmAdapter.onClick = {
+            val bundle = Bundle().apply {
+                putString("slug", it.slug)
+            }
+            findNavController().navigate(R.id.action_favoriteFragment_to_filmDetailFragment, bundle)
+        }
+
         favFilmAdapter.onLongClick = { film ->
             detailViewModel.deleteFavFilm(film.slug)
             viewModel.getFavFilm(Constants.getUsername(requireContext())!!)
         }
     }
+
+
 
     private fun notifyListData() {
         lifecycleScope.launch {
@@ -83,9 +94,23 @@ class FavoriteFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val username = Constants.getUsername(requireContext())!!
-        viewModel.getFavFilm(username)
+        val username = Constants.getUsername(requireContext())
+
+        if (username.isNullOrEmpty()) {
+            // Người dùng chưa đăng nhập, ẩn danh sách yêu thích hoặc hiển thị thông báo
+            binding.rvFavFilm.visibility = View.GONE
+            binding.tvEmptyMessage.visibility = View.VISIBLE
+            binding.imageEmptyBox.visibility = View.VISIBLE
+            binding.tvEmptyMessage.text = "Chưa có phim nào được thêm vào danh sách"
+        } else {
+            // Người dùng đã đăng nhập, tải danh sách yêu thích
+            binding.rvFavFilm.visibility = View.VISIBLE
+            binding.imageEmptyBox.visibility = View.INVISIBLE
+            binding.tvEmptyMessage.visibility = View.GONE
+            viewModel.getFavFilm(username)
+        }
     }
+
 
 
 

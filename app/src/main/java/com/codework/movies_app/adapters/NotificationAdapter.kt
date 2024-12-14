@@ -73,7 +73,6 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.Notificatio
         onLongClick?.invoke(currentList[position])
         currentList.removeAt(position)
         differ.submitList(currentList)
-
     }
 
     var onLongClick: ((Notification) -> Unit)? = null

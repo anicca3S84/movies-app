@@ -60,11 +60,10 @@ class NotificationViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 MarsApi.retrofitService.deleteNotification(id)
-                refreshNotifications() // Refresh list after deletion
+                refreshNotifications()
             } catch (e: Exception) {
                 Log.e("deleteNotification", "Error: ${e.message}")
             }
         }
     }
 }
-

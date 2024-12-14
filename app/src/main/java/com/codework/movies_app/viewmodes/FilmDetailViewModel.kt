@@ -60,6 +60,12 @@ class FilmDetailViewModel @Inject constructor(
     private val _listComment = MutableStateFlow<Resource<List<Comment>>>(Resource.Unspecified())
     val listComment = _listComment.asStateFlow()
 
+    fun isUserLoggedIn(): Boolean {
+        return FirebaseAuth.getInstance().currentUser != null
+    }
+
+
+
     fun addComment(slug: String, content: String){
         viewModelScope.launch {
             _comment.emit(Resource.Loading())
@@ -147,7 +153,7 @@ class FilmDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val response = MarsApi.retrofitService.getFilmDetail(slug, Constants.getUsername(context)!!)
+                val response = MarsApi.retrofitService.getFilmDetail(slug, Constants.getUsername(context))
                 _filmDetail.emit(Resource.Success(response))
                 Log.d("getFilmDetailBySlug", "${response}")
 

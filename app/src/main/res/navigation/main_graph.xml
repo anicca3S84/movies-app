@@ -9,12 +9,20 @@
         android:id="@+id/notificationFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.NotificationFragment"
         android:label="DownloadFragment"
-        tools:layout="@layout/fragment_notification"/>
+        tools:layout="@layout/fragment_notification">
+        <action
+            android:id="@+id/action_notificationFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.FavoriteFragment"
         android:label="FavoriteFragment"
-        tools:layout="@layout/fragment_favorite"/>
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_favoriteFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.codework.movies_app.fragments.main_fragment.ProfileFragment"
@@ -24,6 +32,9 @@
             android:id="@+id/action_profileFragment_to_userAccountFragment"
             app:destination="@id/userAccountFragment"
             app:enterAnim="@anim/from_left" />
+        <action
+            android:id="@+id/action_profileFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -67,6 +78,9 @@
         <argument
             android:name="slug"
             app:argType="string" />
+        <action
+            android:id="@+id/action_filmDetailFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
     </fragment>
     <fragment
         tools:layout="@layout/fragment_media_player"
@@ -78,4 +92,9 @@
             app:destination="@id/filmDetailFragment"
             app:enterAnim="@anim/from_top" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment2"
+        tools:layout="@layout/fragment_login"
+        android:name="com.codework.movies_app.fragments.login_register.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>

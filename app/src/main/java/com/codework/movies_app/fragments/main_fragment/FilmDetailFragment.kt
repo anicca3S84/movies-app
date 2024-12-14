@@ -24,12 +24,14 @@ import com.codework.movies_app.adapters.CommentAdapter
 import com.codework.movies_app.adapters.FavFilmAdapter
 import com.codework.movies_app.adapters.SameCategoryAdapter
 import com.codework.movies_app.databinding.FragmentFilmDetailBinding
+import com.codework.movies_app.dialogs.showLoginDialog
 import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.utils.VerticalItemDecoration
 import com.codework.movies_app.viewmodes.FavoriteViewModel
 import com.codework.movies_app.viewmodes.FilmDetailViewModel
 import com.codework.movies_app.viewmodes.SharedCountViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -94,11 +96,6 @@ class FilmDetailFragment : Fragment() {
                         is Resource.Error -> {
                             sendProgressBar.visibility = View.GONE
                             imgSend.visibility = View.VISIBLE
-                            Toast.makeText(
-                                requireContext(),
-                                "Vui lòng đăng nhập",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
 
                         else -> Unit
@@ -106,6 +103,8 @@ class FilmDetailFragment : Fragment() {
                 }
             }
         }
+
+
 
         lifecycleScope.launch {
             viewModel.sameCategory.collectLatest {
@@ -164,7 +163,20 @@ class FilmDetailFragment : Fragment() {
 
     private fun addComment(slug: String) {
         binding.imgSend.setOnClickListener {
+            if (Constants.getUsername(requireContext()).isNullOrEmpty()) {
+                Log.d("currentUser", "currentUser: $Constants.getUsername(requireContext()")
+                showLoginDialog(requireContext(), findNavController())
+                binding.edtComment.text.clear()
+                binding.edtComment.clearFocus()
+                return@setOnClickListener
+            }
+
             val content = binding.edtComment.text.toString().trim()
+            if (content.isEmpty()) {
+                Toast.makeText(requireContext(), "Nội dung bình luận không được để trống", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             viewModel.addComment(slug, content)
 
             lifecycleScope.launch {
@@ -180,14 +192,13 @@ class FilmDetailFragment : Fragment() {
 
                             binding.edtComment.text.clear()
                             binding.edtComment.clearFocus()
-                            Toast.makeText(requireContext(), "Gửi thành công", Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(requireContext(), "Gửi thành công", Toast.LENGTH_SHORT).show()
                         }
 
                         is Resource.Error -> {
                             Toast.makeText(
                                 requireContext(),
-                                "Vui lòng đăng nhập",
+                                "Lỗi khi gửi bình luận: ${it.message}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -199,6 +210,7 @@ class FilmDetailFragment : Fragment() {
         }
     }
 
+
     private fun setUpCount() {
         countViewModel.count.observe(viewLifecycleOwner) { count ->
             Log.d("tvFavs", count.toString())
@@ -206,32 +218,38 @@ class FilmDetailFragment : Fragment() {
     }
 
     private fun updateFavOnclick(slug: String) {
-        var isColorChanged = false
-        val username = Constants.getUsername(requireContext())
-        if (username != null) {
-            Log.d("updateFavOnclick", username)
-            binding.imgFav.setOnClickListener {
-                if (isColorChanged) {
-                    binding.imgFav.setColorFilter(
-                        ContextCompat.getColor(requireContext(), R.color.g_white)
-                    )
-                    viewModel.deleteFavFilm(slug)
-                    Toast.makeText(requireContext(), "Đã bỏ thích", Toast.LENGTH_SHORT).show()
-                } else {
-                    binding.imgFav.setColorFilter(
-                        ContextCompat.getColor(requireContext(), R.color.g_red)
-                    )
-                    setUpCount()
-                    viewModel.addFavFilm(slug)
-                    Toast.makeText(requireContext(), "Đã thích", Toast.LENGTH_SHORT).show()
-                }
+        var isColorChanged = false // Trạng thái ban đầu
 
-                isColorChanged = !isColorChanged
+        binding.imgFav.setOnClickListener {
+            // Kiểm tra nếu chưa đăng nhập
+            if (!viewModel.isUserLoggedIn()) {
+                showLoginDialog(requireContext(), findNavController())
+                return@setOnClickListener // Không thay đổi gì thêm
             }
-        } else {
-            Toast.makeText(requireContext(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show()
+
+            // Người dùng đã đăng nhập, thực hiện logic thay đổi trạng thái yêu thích
+            if (isColorChanged) {
+                binding.imgFav.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.g_white)
+                )
+                viewModel.deleteFavFilm(slug)
+                Toast.makeText(requireContext(), "Đã bỏ thích", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.imgFav.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.g_red)
+                )
+                setUpCount()
+                viewModel.addFavFilm(slug)
+                Toast.makeText(requireContext(), "Đã thích", Toast.LENGTH_SHORT).show()
+            }
+
+            // Cập nhật trạng thái
+            isColorChanged = !isColorChanged
         }
     }
+
+
+
 
 
     private fun observeFilmDetail(slug: String) {
@@ -287,7 +305,7 @@ class FilmDetailFragment : Fragment() {
                             tvFavs.text = response.data?.view.toString()
                             btnPlay.visibility =View.VISIBLE
                             progressBar2.visibility = View.INVISIBLE
-                            tvFavs.text = "2450"
+                            tvFavs.text = response.data?.view.toString()
                             tvFilmTitle.text = response.data?.name
                             tvActors.text = response.data?.actor?.joinToString(", ")
                             Log.d("actor", response.data?.actor.toString())

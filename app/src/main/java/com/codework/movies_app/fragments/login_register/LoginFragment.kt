@@ -103,8 +103,9 @@ class LoginFragment : Fragment() {
                                 btnLogin.alpha = 1.0f
                                 Intent(requireActivity(), MainActivity::class.java)
                                     .also { intent ->
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         startActivity(intent)
-//                                        requireActivity().finish() //kết thúc activity này
+                                        requireActivity().finish()
                                     }
                             }
 

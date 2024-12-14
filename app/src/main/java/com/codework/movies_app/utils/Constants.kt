@@ -2,6 +2,7 @@ package com.codework.movies_app.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 object Constants {
     const val USER_COLLECTION = "users"
@@ -13,10 +14,11 @@ object Constants {
     // Lấy username từ SharedPreferences
     fun getUsername(context: Context): String? {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.getString(KEY_USERNAME, null)
+        val username = sharedPreferences.getString(KEY_USERNAME, null)
+        Log.d("Constants", "Lấy username: $username")
+        return username
     }
 
-    // Lưu username vào SharedPreferences
     fun saveUsername(context: Context, username: String) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
