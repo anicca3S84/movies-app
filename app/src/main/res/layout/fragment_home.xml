@@ -1,125 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Phimmoi"
-            android:textColor="@android:color/holo_green_light"
-            android:textSize="24sp"
-            android:gravity="center" />
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:queryHint="Search for items"
-            android:layout_marginHorizontal="8dp"
-            android:background="@drawable/rounded_searchview_background"
-            android:iconifiedByDefault="false" />
-    </LinearLayout>
-    <!-- Top Search Bar -->
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:scrollbars="none">
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
         <LinearLayout
-            android:id="@+id/HSV_linearLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
-
-            <!-- Add child views (ImageView, TextView, etc.) here for the horizontal list -->
+            android:gravity="center_vertical">
             <TextView
-                android:id="@+id/textChoice1"
+                android:id="@+id/label"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Đề xuất"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingHorizontal="8dp"
-                android:background="@drawable/rounded_textview_background" />
-            <TextView
-                android:id="@+id/textChoice2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Phim bộ"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingHorizontal="8dp"
-                android:background="@drawable/rounded_textview_background"/>
-            <TextView
-                android:id="@+id/textChoice3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Phim lẻ"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingHorizontal="8dp"
-                android:background="@drawable/rounded_textview_background"/>
-            <TextView
-                android:id="@+id/textChoice4"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Phiêu lưu"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingHorizontal="8dp"
-                android:background="@drawable/rounded_textview_background"/>
-            <TextView
-                android:id="@+id/textChoice5"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Kinh dị"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingHorizontal="8dp"
-                android:background="@drawable/rounded_textview_background"/>
-            <TextView
-                android:id="@+id/textChoice6"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Viễn tưởng"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingHorizontal="8dp"
-                android:background="@drawable/rounded_textview_background"/>
-            <!-- Add more items as needed -->
-
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Phimmoi"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="24sp"
+                android:gravity="center" />
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:queryHint="Search for items"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/rounded_searchview_background"
+                android:iconifiedByDefault="false" />
         </LinearLayout>
-    </HorizontalScrollView>
+        <!-- Top Search Bar -->
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/HSV_linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <!-- Add child views (ImageView, TextView, etc.) here for the horizontal list -->
+                <TextView
+                    android:id="@+id/textChoice1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Đề xuất"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/rounded_textview_background" />
+                <TextView
+                    android:id="@+id/textChoice2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Phim bộ"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/rounded_textview_background"/>
+                <TextView
+                    android:id="@+id/textChoice3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Phim lẻ"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/rounded_textview_background"/>
+                <TextView
+                    android:id="@+id/textChoice4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Phiêu lưu"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/rounded_textview_background"/>
+                <TextView
+                    android:id="@+id/textChoice5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Kinh dị"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/rounded_textview_background"/>
+                <TextView
+                    android:id="@+id/textChoice6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Viễn tưởng"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/rounded_textview_background"/>
+                <!-- Add more items as needed -->
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefreshlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="256dp">
 
 
-    <!-- RecyclerView for displaying items in a 2-column grid -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical"/>
+                </androidx.viewpager2.widget.ViewPager2>
 
-</LinearLayout>
+                <!-- RecyclerView for displaying items in a 2-column grid -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+
+
 
     <!--<?xml version="1.0" encoding="utf-8"?>-->
     <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
