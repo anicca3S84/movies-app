@@ -7,6 +7,7 @@ import com.codework.movies_app.data.Favorites
 import com.codework.movies_app.data.Item
 import com.codework.movies_app.data.FilmDetail
 import com.codework.movies_app.data.Notification
+import com.codework.movies_app.dto.UserCommentResponse
 import com.codework.movies_app.dto.UserDto
 import com.codework.movies_app.request.CommentRequest
 import com.codework.movies_app.request.FavoriteRequest
@@ -48,7 +49,10 @@ interface MarsApiService {
 
     //film detail
     @GET("/danh-sach/phim/{slug}")
-    suspend fun getFilmDetail(@Path("slug") slug: String, @Query("username") username: String? = null): FilmDetail
+    suspend fun getFilmDetail(
+        @Path("slug") slug: String,
+        @Query("username") username: String? = null
+    ): FilmDetail
 
     //film
     @GET("/danh-sach/filterByCategory/{category}")

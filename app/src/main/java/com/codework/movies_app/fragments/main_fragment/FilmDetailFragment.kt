@@ -146,6 +146,10 @@ class FilmDetailFragment : Fragment() {
             }
         }
 
+
+
+
+
         binding.imgBack.setOnClickListener {
             findNavController().navigateUp()
         }

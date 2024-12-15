@@ -133,11 +133,6 @@ class ProfileViewModel @Inject constructor(
 
             // Đăng xuất Firebase
             auth.signOut()
-
-            // Chuyển sang màn hình Login
-            val intent = Intent(context, LoginRegisterActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            context.startActivity(intent)
         }
     }
 

@@ -49,6 +49,7 @@ class ProfileFragment : Fragment() {
             binding.rvHistory.visibility = View.GONE
         } else {
             viewModel.getHistory(username)
+            binding.tvName.text = username
         }
     }
 
@@ -97,6 +98,7 @@ class ProfileFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         user = resources.data!!
+                        binding.tvName.text = user!!.username
                         Log.d("UserProfile", user!!.email)
                     }
 
@@ -129,12 +131,11 @@ class ProfileFragment : Fragment() {
 
                         is Resource.Success -> {
                             viewModel.logout()
-                            historyAdapter.differ.submitList(emptyList())
                             val intent =
                                 Intent(requireActivity(), LoginRegisterActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
                             requireActivity().finish()
-                            binding.rvHistory.visibility = View.GONE
                         }
 
                         else -> Unit

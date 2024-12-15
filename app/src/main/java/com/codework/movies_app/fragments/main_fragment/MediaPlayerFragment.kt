@@ -48,7 +48,6 @@ class MediaPlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRvEpisode()
         setUpSuggestFilmRv()
-        setUpCount()
         setUpEpisodeOnClick()
         setUpSuggestFilmOnClick()
 
@@ -138,13 +137,7 @@ class MediaPlayerFragment : Fragment() {
         }
     }
 
-    private fun setUpCount() {
-        countViewModel.count.observe(viewLifecycleOwner) { count ->
-            val initialCount = activity?.intent?.getIntExtra("count", 0) ?: 0
-            binding.tvViews.text = initialCount.toString()
-            Log.d("tvViews", count.toString())
-        }
-    }
+
 
     private fun setUpInfo(data: FilmDetail?) {
         binding.apply {

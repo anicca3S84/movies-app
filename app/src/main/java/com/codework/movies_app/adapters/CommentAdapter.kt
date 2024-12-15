@@ -17,7 +17,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
         ViewHolder(binding.root) {
 
         fun bind(item: Comment) {
-            binding.tvUsername.text = item.username
+            binding.tvUsername.text = item.user.userName
             binding.tvContent.text = item.content
             binding.tvTime.text = FormatDate.formatDate(item.createdAt)
         }

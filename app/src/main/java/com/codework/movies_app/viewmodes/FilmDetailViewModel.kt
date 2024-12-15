@@ -75,10 +75,13 @@ class FilmDetailViewModel @Inject constructor(
                 val username = Constants.getUsername(context)
                 if(username != null){
                     try {
-                        val commentRequest = CommentRequest(content, username, slug)
-                        val response = MarsApi.retrofitService.postComment(commentRequest)
-                        _comment.emit(Resource.Success(response))
-                        Log.d("addComment", "Response: $response")
+                        val uid = auth.currentUser?.uid
+                        uid?.let {
+                            val commentRequest = CommentRequest(content, uid, slug)
+                            val response = MarsApi.retrofitService.postComment(commentRequest)
+                            _comment.emit(Resource.Success(response))
+                            Log.d("addComment", "Response: $response")
+                        }
                     }catch (e: Exception){
                         viewModelScope.launch {
                             _comment.emit(Resource.Error(e.message.toString()))
