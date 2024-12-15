@@ -1,7 +1,10 @@
 package com.codework.movies_app.data
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Item(
     val id: Int,
     val name: String,
@@ -13,4 +16,4 @@ data class Item(
     @Json(name = "thumb_url")
     val thumbUrl: String,
     val year: Int
-)
+): Parcelable

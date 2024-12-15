@@ -1,9 +1,11 @@
 package com.codework.movies_app.viewmodes
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codework.movies_app.activities.LoginRegisterActivity
 import com.codework.movies_app.data.ApiResponse
 import com.codework.movies_app.data.User
 import com.codework.movies_app.network.MarsApi
@@ -24,7 +26,7 @@ class ProfileViewModel @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
     @ApplicationContext private val context: Context
-): ViewModel(){
+) : ViewModel() {
     private val _checkLogin = MutableStateFlow<Resource<FirebaseUser>>(Resource.Unspecified())
     val checkLogin = _checkLogin.asStateFlow()
 
@@ -36,34 +38,42 @@ class ProfileViewModel @Inject constructor(
 
     init {
         checkUserStatus()
-        getHistory(Constants.getUsername(context)!!)
+        Constants.getUsername(context)?.let { getHistory(it) }
     }
 
-     fun getHistory(username: String){
+    fun getHistory(username: String?) {
+        if (username.isNullOrEmpty()) {
+            viewModelScope.launch {
+                _history.emit(Resource.Success(ApiResponse()))
+            }
+            return
+        }
+
         viewModelScope.launch {
             _history.emit(Resource.Loading())
             try {
                 val response = MarsApi.retrofitService.getHistory(username)
                 _history.emit(Resource.Success(response))
                 Log.d("getHistory", "${response.items}")
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _history.emit(Resource.Error(e.message.toString()))
                 Log.d("getHistory", "error: ${e.message}")
             }
         }
     }
 
+
     private fun getUser() {
         viewModelScope.launch {
             _user.emit(Resource.Loading())
         }
         val userId = auth.uid
-        if(userId != null){
+        if (userId != null) {
             Log.d("userId", userId.toString())
             firestore.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener { document ->
-                    if(document.exists()){
+                    if (document.exists()) {
                         val user = document.toObject(User::class.java)
                         user?.let {
                             viewModelScope.launch {
@@ -74,18 +84,18 @@ class ProfileViewModel @Inject constructor(
                                 _user.emit(Resource.Error("Không tìm thấy người dùng"))
                             }
                         }
-                    }else{
+                    } else {
                         viewModelScope.launch {
                             _user.emit(Resource.Error("Không tìm thấy người dùng"))
                         }
                     }
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     viewModelScope.launch {
                         _user.emit(Resource.Error("Vui lòng đăng nhập"))
                     }
                 }
-        }else{
+        } else {
             viewModelScope.launch {
                 _user.emit(Resource.Error("Vui lòng đăng nhập!"))
             }
@@ -95,12 +105,12 @@ class ProfileViewModel @Inject constructor(
 
     private fun checkUserStatus() {
         val currentUser = auth.currentUser
-        if(currentUser != null){
+        if (currentUser != null) {
             viewModelScope.launch {
                 _checkLogin.emit(Resource.Success(currentUser))
                 getUser()
             }
-        }else{
+        } else {
             viewModelScope.launch {
                 _checkLogin.emit(Resource.Error("Vui lòng đăng nhập!"))
             }
@@ -109,20 +119,35 @@ class ProfileViewModel @Inject constructor(
 
 
 
+
     fun logout() {
         if (auth.currentUser != null) {
+            Log.d("Logout", "User before sign out: ${auth.currentUser?.uid}")
+
+            // Xóa username trong SharedPreferences
             removeUsernameFromSharedPreferences()
+
+            // Làm mới trạng thái cục bộ
+            val refreshedUsername = Constants.getUsername(context)
+            Log.d("Logout", "Username sau khi làm mới: $refreshedUsername")
+
+            // Đăng xuất Firebase
             auth.signOut()
-            Log.d("Logout", "success")
         }
     }
 
     private fun removeUsernameFromSharedPreferences() {
-        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.remove("username")
+
+        editor.remove("username") // Xóa đúng KEY
         editor.apply()
+
+        // Log kiểm tra sau khi xóa
+        val username = sharedPreferences.getString("username", null)
+        Log.d("SharedPreferences", "Username sau khi xóa: $username")
     }
+
 
 
 }

@@ -86,7 +86,6 @@ class RegisterViewModel @Inject constructor(
                 Log.d("getUserData", "Success")
                 val user = document.toObject(User::class.java)
                 if(user != null){
-                    saveUsername(context, user.username)
                     postUserToApi(user, uid)
                 }else{
                     viewModelScope.launch {

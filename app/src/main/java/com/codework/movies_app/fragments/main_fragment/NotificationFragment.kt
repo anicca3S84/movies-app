@@ -77,7 +77,6 @@ class NotificationFragment : Fragment() {
                     is Resource.Error -> {
                         binding.progressBar.visibility = View.GONE
                         binding.swipeRefreshLayout.isRefreshing = false
-                        Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                     }
                     else -> Unit
                 }
@@ -100,4 +99,3 @@ class NotificationFragment : Fragment() {
         }
     }
 }
-

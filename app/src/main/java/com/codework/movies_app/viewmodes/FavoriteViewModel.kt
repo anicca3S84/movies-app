@@ -24,22 +24,24 @@ import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Private
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     @ApplicationContext private val context: Context
-
 ) : ViewModel() {
     private val _status = MutableStateFlow<Resource<ApiResponse>>(Resource.Unspecified())
     val status = _status.asStateFlow()
 
-    private val username = Constants.getUsername(context)!!
-
     init {
-        getFavFilm(username)
+        val username = Constants.getUsername(context)
+        if (!username.isNullOrEmpty()) {
+            getFavFilm(username)
+        } else {
+            viewModelScope.launch {
+                _status.emit(Resource.Error("Vui lòng đăng nhập để xem danh sách yêu thích."))
+            }
+        }
     }
 
     fun getFavFilm(username: String) {
         viewModelScope.launch {
             _status.emit(Resource.Loading())
-        }
-        viewModelScope.launch {
             try {
                 val response = MarsApi.retrofitService.getListOfFavFilm(username)
                 _status.emit(Resource.Success(response))
@@ -51,3 +53,4 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 }
+

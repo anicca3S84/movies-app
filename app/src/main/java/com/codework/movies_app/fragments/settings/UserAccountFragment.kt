@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.codework.movies_app.R
 import com.codework.movies_app.data.User
 import com.codework.movies_app.databinding.FragmentUserAccountBinding
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.viewmodes.UserAccountViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +54,7 @@ class UserAccountFragment : Fragment() {
                 gender = binding.edGender.text.toString()
             )
             viewModel.updateUser(updatedUser)
+            Constants.saveUsername(requireContext(), updatedUser.username)
         }
 
         // Lắng nghe trạng thái của việc cập nhật thông tin người dùng
@@ -76,7 +78,6 @@ class UserAccountFragment : Fragment() {
                                 "Updated successfully!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            saveUsernameToSharedPreferences(updatedUser.username)
                             findNavController().navigateUp()
                         }
                     }
@@ -89,13 +90,6 @@ class UserAccountFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun saveUsernameToSharedPreferences(username: String) {
-        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("username", username)
-        editor.apply()
     }
 
     // Gọi lại hàm getUser mỗi khi fragment quay lại

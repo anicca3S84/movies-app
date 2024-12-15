@@ -7,11 +7,13 @@ import com.codework.movies_app.data.Favorites
 import com.codework.movies_app.data.Item
 import com.codework.movies_app.data.FilmDetail
 import com.codework.movies_app.data.Notification
+import com.codework.movies_app.dto.UserCommentResponse
 import com.codework.movies_app.dto.UserDto
 import com.codework.movies_app.request.CommentRequest
 import com.codework.movies_app.request.FavoriteRequest
 import com.codework.movies_app.request.SaveTokenRequest
 import com.codework.movies_app.request.UpdateUserRequest
+import com.google.android.gms.common.api.Response
 import com.google.protobuf.Api
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -48,7 +50,10 @@ interface MarsApiService {
 
     //film detail
     @GET("/danh-sach/phim/{slug}")
-    suspend fun getFilmDetail(@Path("slug") slug: String, @Query("username") username: String? = null): FilmDetail
+    suspend fun getFilmDetail(
+        @Path("slug") slug: String,
+        @Query("username") username: String? = null
+    ): FilmDetail
 
     //film
     @GET("/danh-sach/filterByCategory/{category}")
@@ -78,6 +83,7 @@ interface MarsApiService {
         @Query("username") username: String
     ): String
 
+
     @GET("/history/{username}")
     suspend fun getHistory(@Path("username") username: String): ApiResponse
 
@@ -90,8 +96,6 @@ interface MarsApiService {
     @DELETE("/notification/delete/{notificationId}")
     suspend fun deleteNotification(@Path("notificationId") notificationId: Int)
 
-
-
-
-
+    @PUT("/notification/read/{notificationId}")
+    suspend fun markNotificationAsRead(@Path("notificationId") notificationId: Int)
 }

@@ -13,6 +13,7 @@ import com.codework.movies_app.request.SaveTokenRequest
 import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Constants.INTRODUCTION_SP
 import com.codework.movies_app.utils.Constants.USER_COLLECTION
+import com.codework.movies_app.utils.Constants.saveUsername
 import com.codework.movies_app.utils.LoginFieldState
 import com.codework.movies_app.utils.RegisterFieldState
 import com.codework.movies_app.utils.Resource
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -69,6 +71,7 @@ class LoginViewModel @Inject constructor(
                                 _login.emit(Resource.Success(firebaseUser))
                                 Log.d("LoginToken", "Token: $token")
                                 pushTokenToApi(token)
+                                getUserNameById()
                             }
                         }
                         ?.addOnFailureListener { tokenError ->
@@ -87,6 +90,35 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getUserNameById() {
+        val userId = firebaseAuth.currentUser?.uid
+        if (userId != null) {
+            viewModelScope.launch {
+                try {
+                    val document = fireStore.collection(Constants.USER_COLLECTION).document(userId).get().await()
+                    if (document.exists()) {
+                        val user = document.toObject(User::class.java)
+                        user?.let {
+                            val username = it.username
+                            saveUsername(context, username)
+                            Log.d("UserName", "Username: $username")
+                        }
+                    } else {
+                        Log.d("getUserNameById", "User not found!")
+                    }
+                } catch (e: Exception) {
+                    Log.e("getUserNameById", "Error occurred: ${e.message}")
+                    if (e is CancellationException) {
+                        Log.e("getUserNameById", "Job was cancelled")
+                    }
+                }
+            }
+        } else {
+            Log.e("getUserNameById", "User ID is null!")
+        }
+    }
+
 
     private fun pushTokenToApi(token: String?) {
         token?.let {

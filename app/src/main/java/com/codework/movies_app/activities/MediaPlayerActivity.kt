@@ -28,7 +28,6 @@ class MediaPlayerActivity : AppCompatActivity() {
     private var player: ExoPlayer? = null
     private var playWhenReady = true
     private var videoUrl: String? = null
-
     private var playbackPosition = 0L
     private val viewModel by viewModels<MediaPlayerViewModel>()
 
@@ -40,60 +39,35 @@ class MediaPlayerActivity : AppCompatActivity() {
         videoUrl = intent.getStringExtra("url")
         viewModel.slug.value = intent.getStringExtra("slug")
 
+        // Phục hồi trạng thái phát lại nếu có
+        playbackPosition = savedInstanceState?.getLong("playbackPosition") ?: 0L
+        playWhenReady = savedInstanceState?.getBoolean("playWhenReady") ?: true
+
         setUpFlag()
         initializePlayer()
         adjustPlayerViewHeight()
 
-        binding.imgBack.setOnClickListener{
+        binding.imgBack.setOnClickListener {
             releasePlayer()
             finish()
         }
     }
 
-    // Phương thức xử lý Intent mới khi Activity đã tồn tại
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        intent.let {
-            videoUrl = it.getStringExtra("url")  // Lấy URL mới từ Intent
-            updatePlayerWithNewUrl() // Cập nhật lại player với URL mới
-        }
-    }
-
-    // Cập nhật ExoPlayer với URL mới
-    private fun updatePlayerWithNewUrl() {
-        videoUrl?.let {
-            player?.apply {
-                setMediaItem(MediaItem.fromUri(Uri.parse(it))) // Cập nhật MediaItem mới
-                prepare() // Chuẩn bị lại Player
-                playWhenReady = true
-            }
-        }
-    }
-
-
-
     private fun adjustPlayerViewHeight() {
         val playerView = binding.playerView
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Khi xoay ngang (landscape), PlayerView chiếm toàn bộ chiều cao
             playerView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
             binding.imgBack.visibility = View.INVISIBLE
-
         } else {
-            // Khi ở chế độ dọc (portrait), PlayerView có chiều cao cố định 300dp
             playerView.layoutParams.height = (300 * resources.displayMetrics.density).toInt()
             binding.imgBack.visibility = View.VISIBLE
         }
-
-        // Cập nhật lại layout của PlayerView
         playerView.requestLayout()
     }
 
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        // Gọi lại khi thay đổi hướng màn hình
         adjustPlayerViewHeight()
     }
 
@@ -108,11 +82,27 @@ class MediaPlayerActivity : AppCompatActivity() {
         if (player == null && videoUrl != null) {
             player = ExoPlayer.Builder(this).build().apply {
                 setMediaItem(MediaItem.fromUri(Uri.parse(videoUrl)))
+                seekTo(playbackPosition) // Bắt đầu từ vị trí phát lại
                 playWhenReady = this@MediaPlayerActivity.playWhenReady
                 prepare()
             }
             binding.playerView.player = player
         }
+    }
+
+    private fun releasePlayer() {
+        player?.let { exoPlayer ->
+            playbackPosition = exoPlayer.currentPosition // Lưu vị trí phát lại
+            playWhenReady = exoPlayer.playWhenReady // Lưu trạng thái đang phát
+            exoPlayer.release()
+            player = null
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong("playbackPosition", playbackPosition) // Lưu vị trí phát lại
+        outState.putBoolean("playWhenReady", playWhenReady) // Lưu trạng thái đang phát
     }
 
     override fun onDestroy() {
@@ -140,13 +130,5 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         releasePlayer()
-    }
-    private fun releasePlayer() {
-        player?.let { exoPlayer ->
-            playbackPosition = exoPlayer.currentPosition
-            playWhenReady = exoPlayer.playWhenReady
-            exoPlayer.release()
-            player = null
-        }
     }
 }

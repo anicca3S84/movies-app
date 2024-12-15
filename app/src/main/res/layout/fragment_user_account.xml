@@ -169,7 +169,7 @@
             android:layout_marginEnd="16dp"
             android:layout_height="50dp"
             android:background="@drawable/bg_intro_btn"
-            android:hint="@string/tv_gender"
+            android:hint="Giới tính"
             android:maxLines="1"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"

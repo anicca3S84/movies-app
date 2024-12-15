@@ -1,8 +1,11 @@
 package com.codework.movies_app.adapters
 
 import android.app.AlertDialog
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,14 +13,20 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.codework.movies_app.data.Comment
 import com.codework.movies_app.data.Item
 import com.codework.movies_app.databinding.ItemCommentBinding
+import com.codework.movies_app.dialogs.showLoginDialog
+import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.FormatDate
 
-class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+class CommentAdapter(
+    private val context: Context, // Pass context from the Fragment or Activity
+    private val showLoginDialog: () -> Unit // Callback to show the login dialog
+) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+
     inner class CommentViewHolder(private val binding: ItemCommentBinding) :
         ViewHolder(binding.root) {
 
         fun bind(item: Comment) {
-            binding.tvUsername.text = item.username
+            binding.tvUsername.text = item.user.userName
             binding.tvContent.text = item.content
             binding.tvTime.text = FormatDate.formatDate(item.createdAt)
         }
@@ -56,29 +65,13 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
         }
 
         holder.itemView.setOnLongClickListener {
-            AlertDialog.Builder(it.context).apply {
-                setTitle("Xác nhận")
-                setMessage("Bạn có chắc chắn muốn xóa?")
-                setPositiveButton("Xóa") { _, _ ->
-                    removeItem(position)
-                }
-                setNegativeButton("Hủy", null)
-            }.show()
-            true
+            onLongClick?.invoke(comment, position) // Pass the correct position
+            true // Indicate that the event has been handled
         }
-
     }
 
-    private fun removeItem(position: Int) {
-        val currentList = differ.currentList.toMutableList()
-        onLongClick?.invoke(currentList[position])
-        currentList.removeAt(position)
-        differ.submitList(currentList)
 
-    }
-
-    var onLongClick: ((Comment) -> Unit)? = null
+    var onLongClick: ((Comment, Int) -> Unit)? = null
 
     var onClick: ((Comment) -> Unit)? = null
-
 }

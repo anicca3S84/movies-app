@@ -43,36 +43,52 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val username = Constants.getUsername(requireContext())!!
-        viewModel.getHistory(username)
+        val username = Constants.getUsername(requireContext())
+        if (username.isNullOrEmpty()) {
+            historyAdapter.differ.submitList(emptyList())
+            binding.rvHistory.visibility = View.GONE
+        } else {
+            viewModel.getHistory(username)
+            binding.tvName.text = username
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRvHistory()
 
+        historyAdapter.onClick = {
+            val bundle = Bundle().apply {
+                putString("slug", it.slug)
+            }
+            findNavController().navigate(R.id.action_profileFragment_to_filmDetailFragment, bundle)
+        }
+
         lifecycleScope.launch {
-            viewModel.history.collectLatest {
-                when(it){
+            viewModel.history.collectLatest { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        if (resource.data?.items.isNullOrEmpty()) {
+                            binding.rvHistory.visibility = View.GONE
+                            historyAdapter.differ.submitList(emptyList())
+                        } else {
+                            binding.rvHistory.visibility = View.VISIBLE
+                            historyAdapter.differ.submitList(resource.data?.items)
+                        }
+                    }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                         binding.rvHistory.visibility = View.GONE
+                        historyAdapter.differ.submitList(emptyList())
+                        Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Loading -> {
                         binding.rvHistory.visibility = View.GONE
-                    }
-                    is Resource.Success -> {
-                        if(it.data?.items?.isNotEmpty() == true){
-                            historyAdapter.differ.submitList(it.data.items)
-                            binding.rvHistory.visibility = View.VISIBLE
-                        }else{
-                            binding.rvHistory.visibility = View.GONE
-                        }
                     }
                     else -> Unit
                 }
             }
         }
+
 
         lifecycleScope.launch {
             viewModel.user.collectLatest { resources ->
@@ -82,6 +98,7 @@ class ProfileFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         user = resources.data!!
+                        binding.tvName.text = user!!.username
                         Log.d("UserProfile", user!!.email)
                     }
 
@@ -116,6 +133,7 @@ class ProfileFragment : Fragment() {
                             viewModel.logout()
                             val intent =
                                 Intent(requireActivity(), LoginRegisterActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
                             requireActivity().finish()
                         }
