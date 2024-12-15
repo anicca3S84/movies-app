@@ -9,7 +9,7 @@ import com.codework.movies_app.R
 import com.codework.movies_app.activities.LoginRegisterActivity
 import com.codework.movies_app.fragments.login_register.LoginFragment
 
-fun showLoginDialog(context: Context, navController: NavController) {
+fun showLoginDialog(context: Context) {
     AlertDialog.Builder(context)
         .setTitle("Yêu cầu đăng nhập")
         .setMessage("Bạn cần đăng nhập để thực hiện thao tác này. Bạn có muốn đăng nhập không?")

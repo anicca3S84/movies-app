@@ -24,6 +24,7 @@ import com.codework.movies_app.adapters.CommentAdapter
 import com.codework.movies_app.adapters.FavFilmAdapter
 import com.codework.movies_app.adapters.SameCategoryAdapter
 import com.codework.movies_app.databinding.FragmentFilmDetailBinding
+import com.codework.movies_app.dialogs.deleteCommentDialog
 import com.codework.movies_app.dialogs.showLoginDialog
 import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
@@ -43,7 +44,14 @@ class FilmDetailFragment : Fragment() {
     private val viewModel by viewModels<FilmDetailViewModel>()
     private val countViewModel by viewModels<SharedCountViewModel>()
     private val args by navArgs<FilmDetailFragmentArgs>()
-    private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
+    private val commentAdapter: CommentAdapter by lazy {
+        CommentAdapter(
+            requireContext(),
+            showLoginDialog = {
+                showLoginDialog(requireContext())
+            }
+        )
+    }
 
 
     override fun onCreateView(
@@ -55,6 +63,7 @@ class FilmDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val slug = args.slug
@@ -67,13 +76,52 @@ class FilmDetailFragment : Fragment() {
             addComment(it)
         }
 
+        commentAdapter.onLongClick = { comment, position ->
+            val currentUserName = Constants.getUsername(requireContext())
+            if (currentUserName.isNullOrEmpty()) {
+                Log.d("currentUser", "User is not logged in")
+                showLoginDialog(requireContext())
+            } else {
+                deleteCommentDialog(requireContext()) {
+                    lifecycleScope.launch {
+                        if (comment.user.userName == currentUserName) {
+                            viewModel.deleteComment(comment.id, currentUserName)
+                            val currentList = commentAdapter.differ.currentList.toMutableList()
+                            currentList.removeAt(position)
+                            commentAdapter.differ.submitList(currentList)
+                            Toast.makeText(
+                                requireContext(),
+                                "Xóa thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else{
+                            Toast.makeText(
+                                requireContext(),
+                                "Bạn chỉ xóa được bình luận của mình",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                }
+            }
+        }
+
         setUpSameCategoryRv()
         setCommentRcv()
         setUpSameCategoryOnclick()
 
-        commentAdapter.onLongClick = {
-            viewModel.deleteComment(it.id)
-        }
+
+
+
+
+
+
+
+
+
+
+
 
         lifecycleScope.launch {
             viewModel.comment.collectLatest {
@@ -169,7 +217,7 @@ class FilmDetailFragment : Fragment() {
         binding.imgSend.setOnClickListener {
             if (Constants.getUsername(requireContext()).isNullOrEmpty()) {
                 Log.d("currentUser", "currentUser: $Constants.getUsername(requireContext()")
-                showLoginDialog(requireContext(), findNavController())
+                showLoginDialog(requireContext())
                 binding.edtComment.text.clear()
                 binding.edtComment.clearFocus()
                 return@setOnClickListener
@@ -177,7 +225,11 @@ class FilmDetailFragment : Fragment() {
 
             val content = binding.edtComment.text.toString().trim()
             if (content.isEmpty()) {
-                Toast.makeText(requireContext(), "Nội dung bình luận không được để trống", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Nội dung bình luận không được để trống",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -196,7 +248,8 @@ class FilmDetailFragment : Fragment() {
 
                             binding.edtComment.text.clear()
                             binding.edtComment.clearFocus()
-                            Toast.makeText(requireContext(), "Gửi thành công", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Gửi thành công", Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                         is Resource.Error -> {
@@ -227,11 +280,10 @@ class FilmDetailFragment : Fragment() {
         binding.imgFav.setOnClickListener {
             // Kiểm tra nếu chưa đăng nhập
             if (!viewModel.isUserLoggedIn()) {
-                showLoginDialog(requireContext(), findNavController())
+                showLoginDialog(requireContext())
                 return@setOnClickListener // Không thay đổi gì thêm
             }
 
-            // Người dùng đã đăng nhập, thực hiện logic thay đổi trạng thái yêu thích
             if (isColorChanged) {
                 binding.imgFav.setColorFilter(
                     ContextCompat.getColor(requireContext(), R.color.g_white)
@@ -253,16 +305,13 @@ class FilmDetailFragment : Fragment() {
     }
 
 
-
-
-
     private fun observeFilmDetail(slug: String) {
         lifecycleScope.launch {
             viewModel.filmDetail.collect { response ->
                 when (response) {
                     is Resource.Loading -> {
                         binding.apply {
-                            btnPlay.visibility =View.INVISIBLE
+                            btnPlay.visibility = View.INVISIBLE
                             progressBar2.visibility = View.VISIBLE
                             tvFavs.visibility = View.INVISIBLE
                             genre.visibility = View.INVISIBLE
@@ -283,6 +332,7 @@ class FilmDetailFragment : Fragment() {
                             imgStart.visibility = View.INVISIBLE
                         }
                     }
+
                     is Resource.Success -> {
 
                         binding.apply {
@@ -307,7 +357,7 @@ class FilmDetailFragment : Fragment() {
                             tvFavs.visibility = View.VISIBLE
                             tvYear.text = response.data?.year.toString()
                             tvFavs.text = response.data?.view.toString()
-                            btnPlay.visibility =View.VISIBLE
+                            btnPlay.visibility = View.VISIBLE
                             progressBar2.visibility = View.INVISIBLE
                             tvFavs.text = response.data?.view.toString()
                             tvFilmTitle.text = response.data?.name
@@ -318,7 +368,10 @@ class FilmDetailFragment : Fragment() {
                             tvTime.text = response.data?.time.toString()
                             btnEpisode.text = response.data?.episodeTotal
                             tvGenre.text = response.data?.categories?.joinToString(", ") { it.name }
-                            Log.d("genre", response.data?.categories?.joinToString(", ") { it.name }.toString())
+                            Log.d(
+                                "genre",
+                                response.data?.categories?.joinToString(", ") { it.name }.toString()
+                            )
                             tvNation.text = response.data?.countries?.joinToString(", ") { it.name }
                         }
                     }

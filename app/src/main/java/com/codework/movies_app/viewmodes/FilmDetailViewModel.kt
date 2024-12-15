@@ -60,6 +60,9 @@ class FilmDetailViewModel @Inject constructor(
     private val _listComment = MutableStateFlow<Resource<List<Comment>>>(Resource.Unspecified())
     val listComment = _listComment.asStateFlow()
 
+    private val _deleteCommentResult = MutableStateFlow<Resource<String>>(Resource.Unspecified())
+    val deleteCommentResult = _deleteCommentResult.asStateFlow()
+
     fun isUserLoggedIn(): Boolean {
         return FirebaseAuth.getInstance().currentUser != null
     }
@@ -184,16 +187,20 @@ class FilmDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteComment(id: Int) {
+    fun deleteComment(id: Int, currentUserName: String) {
         viewModelScope.launch {
             try {
-                val response = MarsApi.retrofitService.removeComment(id, Constants.getUsername(context)!!)
-                Log.d("deleteCommentId", id.toString())
-                Log.d("deleteCommentUsername", Constants.getUsername(context)!!)
-                Log.d("deleteComment", "Response: $response")
+                val response = MarsApi.retrofitService.removeComment(id, currentUserName)
+                Log.d("deleteComment", "API Response: $response")
             } catch (e: Exception) {
-                Log.d("deleteComment", "Error: ${e.message}")
+                Log.d("deleteComment", e.message.toString())
             }
         }
     }
+
+
+
+
+
+
 }

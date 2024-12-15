@@ -13,6 +13,7 @@ import com.codework.movies_app.request.CommentRequest
 import com.codework.movies_app.request.FavoriteRequest
 import com.codework.movies_app.request.SaveTokenRequest
 import com.codework.movies_app.request.UpdateUserRequest
+import com.google.android.gms.common.api.Response
 import com.google.protobuf.Api
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -82,6 +83,7 @@ interface MarsApiService {
         @Query("username") username: String
     ): String
 
+
     @GET("/history/{username}")
     suspend fun getHistory(@Path("username") username: String): ApiResponse
 
@@ -96,9 +98,4 @@ interface MarsApiService {
 
     @PUT("/notification/read/{notificationId}")
     suspend fun markNotificationAsRead(@Path("notificationId") notificationId: Int)
-
-
-
-
-
 }
