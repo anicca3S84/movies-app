@@ -61,9 +61,10 @@ class FavoriteFragment : Fragment() {
                     val currentList = favFilmAdapter.differ.currentList.toMutableList()
                     currentList.removeAt(position)
                     favFilmAdapter.differ.submitList(currentList)
-                    if(favFilmAdapter.differ.currentList.size == 0){
+                    if(favFilmAdapter.differ.currentList.size == 1){
                         binding.tvEmptyMessage.visibility = View.VISIBLE
                         binding.imageEmptyBox.visibility = View.VISIBLE
+                        binding.tvEmptyMessage.text = "Chưa có phim nào được thêm vào danh sách"
                         binding.progressBar.visibility = View.GONE
                         binding.rvFavFilm.visibility = View.GONE
                         binding.swipeRefreshLayout.isRefreshing = false
@@ -95,7 +96,7 @@ class FavoriteFragment : Fragment() {
                     }
 
                     is Resource.Success -> {
-                        favFilmAdapter.differ.submitList(it.data?.items)
+//                        favFilmAdapter.differ.submitList(it.data?.items)
                         if (favFilmAdapter.differ.currentList.size == 0) {
                             binding.tvEmptyMessage.visibility = View.VISIBLE
                             binding.imageEmptyBox.visibility = View.VISIBLE
@@ -178,7 +179,6 @@ class FavoriteFragment : Fragment() {
     }
 
     }
-
 
     private fun setUpFavRcv() {
         binding.rvFavFilm.apply {

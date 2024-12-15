@@ -1,8 +1,7 @@
-package com.codework.movies_app.utils
+package com.codework.movies_app.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 
 object NetworkUtils {
 

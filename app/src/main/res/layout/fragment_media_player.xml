@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,13 +14,14 @@
         <LinearLayout
             android:id="@+id/layoutTitle"
             android:layout_width="360dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/tvFilmTitle"
                 android:layout_width="match_parent"
-                android:layout_weight="0.7"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.7"
                 android:fontFamily="@font/sf_pro_display"
                 android:text="@string/tvMovieTitle"
                 android:textColor="@color/white"
@@ -145,18 +146,6 @@
             app:layout_constraintEnd_toEndOf="@+id/rvSuggest"
             app:layout_constraintStart_toStartOf="@+id/rvSuggest"
             app:layout_constraintTop_toTopOf="@+id/rvSuggest" />
-
-        <TextView
-            android:id="@+id/tvComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Bình luận"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvSuggest" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

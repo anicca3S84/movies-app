@@ -64,6 +64,7 @@ class MediaPlayerFragment : Fragment() {
                         binding.tvTotalEpisodes.text =
                             episodesAdapter.differ.currentList.size.toString()
 
+
                     }
 
                     is Resource.Error -> {

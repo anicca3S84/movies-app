@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import com.codework.movies_app.network.MarsApi
-import com.codework.movies_app.utils.NetworkUtils
+import com.codework.movies_app.network.NetworkUtils
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
