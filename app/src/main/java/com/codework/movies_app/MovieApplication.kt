@@ -2,7 +2,9 @@ package com.codework.movies_app
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import com.codework.movies_app.network.MarsApi
+import com.codework.movies_app.utils.NetworkUtils
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,8 +14,11 @@ import kotlinx.coroutines.launch
 class MovieApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-
-        callApiOnAppStart()
+        if (NetworkUtils.isInternetAvailable(this)) {
+            callApiOnAppStart()
+        } else {
+            Toast.makeText(this, "Vui lòng kiểm tra kết nối Internet", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun callApiOnAppStart() {
