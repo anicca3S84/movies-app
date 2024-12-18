@@ -59,6 +59,9 @@ class MainActivity : AppCompatActivity() {
                     bottomNavigationView?.visibility = View.GONE
                     window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 }
+                R.id.searchFragment -> {
+                    bottomNavigationView?.visibility = View.GONE
+                }
 
                 else -> {
                     window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)

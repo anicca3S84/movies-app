@@ -24,7 +24,7 @@
                 android:id="@+id/searchView"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:queryHint="Search for items"
                 android:layout_marginHorizontal="8dp"
                 android:background="@drawable/rounded_searchview_background"

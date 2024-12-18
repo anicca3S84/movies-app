@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootSearchItemLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:paddingVertical="16dp">
+
+        <ImageView
+            android:id="@+id/searchItem_image"
+            android:layout_width="132dp"
+            android:layout_height="150dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraSmall"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="Item image"
+            android:scaleType="centerCrop"
+            android:elevation="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <TextView
+            android:id="@+id/searchItem_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên phim"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:paddingLeft="8dp"
+            app:layout_constraintLeft_toRightOf="@id/searchItem_image"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/searchItem_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2024"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:paddingLeft="8dp"
+            app:layout_constraintTop_toBottomOf="@id/searchItem_name"
+            app:layout_constraintLeft_toRightOf="@id/searchItem_image"/>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="CHIẾU NGAY"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@drawable/rounded_searchitem_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -190,25 +190,28 @@ class HomeFragment: Fragment() {
         })
         viewModel.getNewFilms(1, 50)
 
-        searchView.setOnQueryTextListener( object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    viewModel.searchItems(it)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    if(it.isNotEmpty()) {
-                        viewModel.searchItems(it)
-                    } else {
-                        viewModel.getNewFilms(1, 20)
-                    }
-                }
-                return true
-            }
-        })
+//        searchView.setOnQueryTextListener( object: SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                query?.let {
+//                    viewModel.searchItems(it)
+//                }
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                newText?.let {
+//                    if(it.isNotEmpty()) {
+//                        viewModel.searchItems(it)
+//                    } else {
+//                        viewModel.getNewFilms(1, 20)
+//                    }
+//                }
+//                return true
+//            }
+//        })
+        searchView.setOnClickListener {
+            this.findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
 
 
         textChoice1.setOnTouchListener {v, event ->

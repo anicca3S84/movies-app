@@ -48,6 +48,27 @@
             android:id="@+id/action_homeFragment_to_filmDetailFragment"
             app:destination="@id/filmDetailFragment"
             app:enterAnim="@anim/from_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/fade_in"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_searchFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment"
+            app:enterAnim="@anim/from_right"/>
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/fade_in"/>
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
