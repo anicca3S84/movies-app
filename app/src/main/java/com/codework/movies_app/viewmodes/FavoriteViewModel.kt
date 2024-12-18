@@ -39,6 +39,17 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
+    fun deleteFavFilm(username: String, slug: String){
+        viewModelScope.launch {
+            try {
+                val response = MarsApi.retrofitService.deleteFavFilm(username, slug)
+                Log.d("deleteFavFilm", response)
+            }catch (e: Exception){
+                Log.d("deleteFavFilm", e.message.toString())
+            }
+        }
+    }
+
     fun getFavFilm(username: String) {
         viewModelScope.launch {
             _status.emit(Resource.Loading())

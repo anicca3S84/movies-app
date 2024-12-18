@@ -32,7 +32,6 @@ import javax.inject.Inject
 @HiltViewModel
 class FilmDetailViewModel @Inject constructor(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -60,14 +59,9 @@ class FilmDetailViewModel @Inject constructor(
     private val _listComment = MutableStateFlow<Resource<List<Comment>>>(Resource.Unspecified())
     val listComment = _listComment.asStateFlow()
 
-    private val _deleteCommentResult = MutableStateFlow<Resource<String>>(Resource.Unspecified())
-    val deleteCommentResult = _deleteCommentResult.asStateFlow()
-
     fun isUserLoggedIn(): Boolean {
         return FirebaseAuth.getInstance().currentUser != null
     }
-
-
 
     fun addComment(slug: String, content: String){
         viewModelScope.launch {

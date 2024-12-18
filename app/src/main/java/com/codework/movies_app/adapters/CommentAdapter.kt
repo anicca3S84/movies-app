@@ -18,8 +18,8 @@ import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.FormatDate
 
 class CommentAdapter(
-    private val context: Context, // Pass context from the Fragment or Activity
-    private val showLoginDialog: () -> Unit // Callback to show the login dialog
+    private val context: Context,
+    private val showLoginDialog: () -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     inner class CommentViewHolder(private val binding: ItemCommentBinding) :

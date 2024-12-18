@@ -44,6 +44,7 @@ class FilmDetailFragment : Fragment() {
     private val viewModel by viewModels<FilmDetailViewModel>()
     private val countViewModel by viewModels<SharedCountViewModel>()
     private val args by navArgs<FilmDetailFragmentArgs>()
+    private var isColorChanged = false
     private val commentAdapter: CommentAdapter by lazy {
         CommentAdapter(
             requireContext(),
@@ -110,17 +111,6 @@ class FilmDetailFragment : Fragment() {
         setUpSameCategoryRv()
         setCommentRcv()
         setUpSameCategoryOnclick()
-
-
-
-
-
-
-
-
-
-
-
 
 
         lifecycleScope.launch {
@@ -275,14 +265,16 @@ class FilmDetailFragment : Fragment() {
     }
 
     private fun updateFavOnclick(slug: String) {
-        var isColorChanged = false // Trạng thái ban đầu
+
 
         binding.imgFav.setOnClickListener {
-            // Kiểm tra nếu chưa đăng nhập
             if (!viewModel.isUserLoggedIn()) {
                 showLoginDialog(requireContext())
-                return@setOnClickListener // Không thay đổi gì thêm
+                return@setOnClickListener
             }
+
+            val currentUser = Constants.getUsername(requireContext())
+
 
             if (isColorChanged) {
                 binding.imgFav.setColorFilter(
@@ -321,7 +313,9 @@ class FilmDetailFragment : Fragment() {
                             actors.visibility = View.INVISIBLE
                             nation.visibility = View.INVISIBLE
                             summary.visibility = View.INVISIBLE
+                            textView4.visibility = View.INVISIBLE
                             comment.visibility = View.INVISIBLE
+                            imgSend.visibility = View.INVISIBLE
                             imgAvatar.visibility = View.INVISIBLE
                             edtComment.visibility = View.INVISIBLE
                             imgViews.visibility = View.INVISIBLE
@@ -334,10 +328,19 @@ class FilmDetailFragment : Fragment() {
                     }
 
                     is Resource.Success -> {
-
                         binding.apply {
                             Glide.with(requireContext()).load(response.data?.thumbUrl)
                                 .into(imgPoster)
+                            val currentUser = Constants.getUsername(requireContext())
+                            val isFavorite = response.data?.favorites?.any { it.username == currentUser } == true
+
+                            isColorChanged = isFavorite // Update initial state
+                            imgFav.setColorFilter(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    if (isFavorite) R.color.g_red else R.color.g_white
+                                )
+                            )
                             imgStart.visibility = View.VISIBLE
                             genre.visibility = View.VISIBLE
                             year.visibility = View.VISIBLE
@@ -346,6 +349,8 @@ class FilmDetailFragment : Fragment() {
                             actors.visibility = View.VISIBLE
                             nation.visibility = View.VISIBLE
                             summary.visibility = View.VISIBLE
+                            imgSend.visibility = View.VISIBLE
+                            textView4.visibility = View.VISIBLE
                             comment.visibility = View.VISIBLE
                             imgAvatar.visibility = View.VISIBLE
                             edtComment.visibility = View.VISIBLE
