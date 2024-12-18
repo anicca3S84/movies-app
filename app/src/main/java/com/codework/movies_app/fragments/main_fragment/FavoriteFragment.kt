@@ -138,7 +138,13 @@ class FavoriteFragment : Fragment() {
         val username = Constants.getUsername(requireContext())
 
         lifecycleScope.launch {
-            viewModel.getFavFilm(username!!)
+            if(username.isNullOrEmpty()){
+                binding.tvEmptyMessage.text = "Vui lòng đăng nhập để sử dụng tính năng này"
+                binding.tvEmptyMessage.visibility = View.VISIBLE
+                binding.imageEmptyBox.visibility = View.VISIBLE
+                return@launch
+            }
+            viewModel.getFavFilm(username)
 
             viewModel.status.collectLatest {
                 when (it) {
