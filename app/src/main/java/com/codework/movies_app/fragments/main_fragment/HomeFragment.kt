@@ -175,6 +175,8 @@ class HomeFragment: Fragment() {
             if(seriesResponse.status) {
                 itemAdapter = ItemAdapter(seriesResponse.items, this)
                 recyclerView.adapter = itemAdapter
+                viewPagerAdapter = ViewPagerAdapter(seriesResponse.items.take(5), this)
+                viewPager.adapter = viewPagerAdapter
             } else {
                 Log.d("Load PhimBo/Le data:", "Failed!")
             }
@@ -184,6 +186,8 @@ class HomeFragment: Fragment() {
             if(categoriesResponse.status) {
                 itemAdapter = ItemAdapter(categoriesResponse.items, this)
                 recyclerView.adapter = itemAdapter
+                viewPagerAdapter = ViewPagerAdapter(categoriesResponse.items.take(5), this)
+                viewPager.adapter = viewPagerAdapter
             } else {
                 Log.d("Load phim nhieu the loai:", "Failed!")
             }
