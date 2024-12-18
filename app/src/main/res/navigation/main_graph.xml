@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_profileFragment_to_filmDetailFragment"
             app:destination="@id/filmDetailFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -100,4 +103,13 @@
         tools:layout="@layout/fragment_login"
         android:name="com.codework.movies_app.fragments.login_register.LoginFragment"
         android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/historyFragment"
+        tools:layout="@layout/fragment_history"
+        android:name="com.codework.movies_app.fragments.main_fragment.HistoryFragment"
+        android:label="HistoryFragment" >
+        <action
+            android:id="@+id/action_historyFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
 </navigation>

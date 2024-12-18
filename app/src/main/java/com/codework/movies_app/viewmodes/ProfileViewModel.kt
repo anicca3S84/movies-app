@@ -36,6 +36,9 @@ class ProfileViewModel @Inject constructor(
     private val _history = MutableStateFlow<Resource<ApiResponse>>(Resource.Unspecified())
     val history = _history.asStateFlow()
 
+    private val _deleteAllHistory = MutableStateFlow<Resource<String>>(Resource.Unspecified())
+    val deleteAllHistory = _deleteAllHistory.asStateFlow()
+
     init {
         checkUserStatus()
         Constants.getUsername(context)?.let { getHistory(it) }
@@ -61,6 +64,34 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteHistory(username: String, filmId: Int){
+        viewModelScope.launch {
+            try {
+                val response = MarsApi.retrofitService.deleteHistory(username, filmId)
+                Log.d("deleteFavFilm", response)
+            }catch (e: Exception){
+                Log.d("deleteFavFilm", e.message.toString())
+            }
+        }
+    }
+
+    fun deleteAllHistory(username: String) {
+        viewModelScope.launch {
+            try {
+                _deleteAllHistory.emit(Resource.Loading()) // Emit loading state
+                val response = MarsApi.retrofitService.deleteAllHistory(username)
+                Log.d("deleteAllHistory", response)
+
+                // After deletion, emit an empty list as success
+                _deleteAllHistory.emit(Resource.Success(response))
+            } catch (e: Exception) {
+                Log.e("deleteAllHistory", e.message.toString())
+                _deleteAllHistory.emit(Resource.Error(e.message.toString()))
+            }
+        }
+    }
+
 
 
     private fun getUser() {
@@ -116,8 +147,6 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
-
 
 
     fun logout() {

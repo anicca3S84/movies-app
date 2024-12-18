@@ -98,4 +98,10 @@ interface MarsApiService {
 
     @PUT("/notification/read/{notificationId}")
     suspend fun markNotificationAsRead(@Path("notificationId") notificationId: Int)
+
+    @DELETE("/history/{username}/{filmId}")
+    suspend fun deleteHistory(@Path("username") username: String, @Path("filmId") filmId: Int): String
+
+    @DELETE("/history/{username}")
+    suspend fun deleteAllHistory(@Path("username") username: String): String
 }

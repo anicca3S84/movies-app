@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codework.movies_app.R
 import com.codework.movies_app.adapters.FavFilmAdapter
@@ -49,40 +51,47 @@ class FavoriteFragment : Fragment() {
         setUpFavRcv()
         notifyListData()
 
-        favFilmAdapter.onLongClick = { film, position ->
-            val currentUserName = Constants.getUsername(requireContext())
-            deleteCommentDialog(requireContext()) {
-                lifecycleScope.launch {
-
-                    viewModel.deleteFavFilm(currentUserName!!,film.slug)
-                    Log.d("CurrentUserName", currentUserName.toString())
-                    Log.d("FilmSlug", film.slug)
-
-                    val currentList = favFilmAdapter.differ.currentList.toMutableList()
-                    currentList.removeAt(position)
-                    favFilmAdapter.differ.submitList(currentList)
-                    if(favFilmAdapter.differ.currentList.size == 1){
-                        binding.tvEmptyMessage.visibility = View.VISIBLE
-                        binding.imageEmptyBox.visibility = View.VISIBLE
-                        binding.tvEmptyMessage.text = "Chưa có phim nào được thêm vào danh sách"
-                        binding.progressBar.visibility = View.GONE
-                        binding.rvFavFilm.visibility = View.GONE
-                        binding.swipeRefreshLayout.isRefreshing = false
-                    }
-                    Toast.makeText(
-                        requireContext(),
-                        "Xóa thành công",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-
         favFilmAdapter.onClick = {
             val bundle = Bundle().apply {
                 putString("slug", it.slug)
             }
             findNavController().navigate(R.id.action_favoriteFragment_to_filmDetailFragment, bundle)
+        }
+
+        favFilmAdapter.onLongClick = { film, position ->
+            val currentUserName = Constants.getUsername(requireContext())
+            deleteCommentDialog(requireContext()) {
+                lifecycleScope.launch {
+                    viewModel.deleteFavFilm(currentUserName!!, film.slug)
+                    Log.d("CurrentUserName", currentUserName)
+                    Log.d("FilmSlug", film.slug)
+                    val updatedList = favFilmAdapter.differ.currentList.toMutableList()
+                    if (position < updatedList.size && updatedList[position].id == film.id) {
+                        updatedList.removeAt(position)
+                        favFilmAdapter.differ.submitList(updatedList) {
+                            favFilmAdapter.notifyDataSetChanged()
+                        }
+
+                        // Handle empty state UI
+                        if (updatedList.isEmpty()) {
+                            binding.tvEmptyMessage.visibility = View.VISIBLE
+                            binding.imageEmptyBox.visibility = View.VISIBLE
+                            binding.tvEmptyMessage.text = "Chưa có phim nào được thêm vào danh sách"
+                            binding.progressBar.visibility = View.GONE
+                            binding.rvFavFilm.visibility = View.GONE
+                            binding.swipeRefreshLayout.isRefreshing = false
+                        }
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Xóa thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Log.d("Error", "Invalid position or item mismatch!")
+                    }
+                }
+            }
         }
     }
 
@@ -97,21 +106,20 @@ class FavoriteFragment : Fragment() {
 
                     is Resource.Success -> {
 //                        favFilmAdapter.differ.submitList(it.data?.items)
-                        if (favFilmAdapter.differ.currentList.size == 0) {
-                            binding.tvEmptyMessage.visibility = View.VISIBLE
-                            binding.imageEmptyBox.visibility = View.VISIBLE
-                            binding.progressBar.visibility = View.GONE
-                            binding.rvFavFilm.visibility = View.GONE
-                            binding.swipeRefreshLayout.isRefreshing = false
-                            binding.tvEmptyMessage.text = "Chưa có phim nào được thêm vào danh sách"
-                        } else {
-                            binding.tvEmptyMessage.visibility = View.GONE
-                            binding.imageEmptyBox.visibility = View.GONE
-                            binding.progressBar.visibility = View.GONE
-                            binding.rvFavFilm.visibility = View.VISIBLE
-                            binding.swipeRefreshLayout.isRefreshing = false
-                        }
-
+//                        if (favFilmAdapter.differ.currentList.size == 0) {
+//                            binding.tvEmptyMessage.visibility = View.VISIBLE
+//                            binding.imageEmptyBox.visibility = View.VISIBLE
+//                            binding.progressBar.visibility = View.GONE
+//                            binding.rvFavFilm.visibility = View.GONE
+//                            binding.swipeRefreshLayout.isRefreshing = false
+//                            binding.tvEmptyMessage.text = "Chưa có phim nào được thêm vào danh sách"
+//                        } else {
+//                            binding.tvEmptyMessage.visibility = View.GONE
+//                            binding.imageEmptyBox.visibility = View.GONE
+//                            binding.progressBar.visibility = View.GONE
+//                            binding.rvFavFilm.visibility = View.VISIBLE
+//                            binding.swipeRefreshLayout.isRefreshing = false
+//                        }
                     }
 
                     is Resource.Error -> {
@@ -192,9 +200,12 @@ class FavoriteFragment : Fragment() {
             layoutManager = LinearLayoutManager(
                 requireContext(), LinearLayoutManager.VERTICAL, false
             )
-            addItemDecoration(VerticalItemDecoration())
+            addItemDecoration(
+                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+                    setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
+                }
+            )
         }
-
     }
 
 

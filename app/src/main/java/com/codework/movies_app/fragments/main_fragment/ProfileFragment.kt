@@ -18,11 +18,10 @@ import com.codework.movies_app.activities.LoginRegisterActivity
 import com.codework.movies_app.adapters.HistoryAdapter
 import com.codework.movies_app.data.User
 import com.codework.movies_app.databinding.FragmentProfileBinding
+import com.codework.movies_app.dialogs.showLoginDialog
 import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.viewmodes.ProfileViewModel
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -59,6 +58,10 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRvHistory()
 
+        binding.layoutHistory.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_historyFragment)
+        }
+
         historyAdapter.onClick = {
             val bundle = Bundle().apply {
                 putString("slug", it.slug)
@@ -70,12 +73,12 @@ class ProfileFragment : Fragment() {
             viewModel.history.collectLatest { resource ->
                 when (resource) {
                     is Resource.Success -> {
-                        if (resource.data?.items.isNullOrEmpty()) {
+                        val items = resource.data?.items.orEmpty()
+                        if (items.isEmpty()) {
                             binding.rvHistory.visibility = View.GONE
-                            historyAdapter.differ.submitList(emptyList())
                         } else {
                             binding.rvHistory.visibility = View.VISIBLE
-                            historyAdapter.differ.submitList(resource.data?.items)
+                            historyAdapter.differ.submitList(items)
                         }
                     }
                     is Resource.Error -> {
@@ -118,7 +121,7 @@ class ProfileFragment : Fragment() {
                     R.id.action_profileFragment_to_userAccountFragment,
                     bundle
                 )
-            } ?: Toast.makeText(requireContext(), "Vui lòng đăng nhập!", Toast.LENGTH_SHORT).show()
+            } ?: showLoginDialog(requireContext())
         }
 
 
@@ -133,13 +136,6 @@ class ProfileFragment : Fragment() {
 
                         is Resource.Success -> {
                             viewModel.logout()
-                            FirebaseMessaging.getInstance().deleteToken()
-                                .addOnSuccessListener { avoid ->
-                                    Log.d("FCM delete status: ", "Token Deleted")
-                                }
-                                .addOnFailureListener { e -> {
-                                    Log.e("FCM delete status: ", "Failed to delete token", e)
-                                } }
                             val intent =
                                 Intent(requireActivity(), LoginRegisterActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

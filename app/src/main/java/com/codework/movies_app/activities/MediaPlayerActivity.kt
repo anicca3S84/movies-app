@@ -27,8 +27,8 @@ class MediaPlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMediaPlayerBinding
     private var player: ExoPlayer? = null
     private var playWhenReady = true
-    private var videoUrl: String? = null
     private var playbackPosition = 0L
+    private var videoUrl: String? = null
     private val viewModel by viewModels<MediaPlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +38,6 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         videoUrl = intent.getStringExtra("url")
         viewModel.slug.value = intent.getStringExtra("slug")
-
-        // Phục hồi trạng thái phát lại nếu có
-        playbackPosition = savedInstanceState?.getLong("playbackPosition") ?: 0L
-        playWhenReady = savedInstanceState?.getBoolean("playWhenReady") ?: true
 
         setUpFlag()
         initializePlayer()
@@ -53,9 +49,31 @@ class MediaPlayerActivity : AppCompatActivity() {
         }
     }
 
+    // Handle new intent for switching episodes
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        intent.let {
+            videoUrl = it.getStringExtra("url")
+            restartPlayerForNewEpisode() // Restart the player for the new episode
+        }
+    }
+
+    // Restart the player for a new episode
+    private fun restartPlayerForNewEpisode() {
+        videoUrl?.let {
+            playbackPosition = 0L // Reset playback position to the beginning
+            player?.apply {
+                clearMediaItems() // Clear previous episode's media items
+                setMediaItem(MediaItem.fromUri(Uri.parse(it))) // Set new episode
+                seekTo(playbackPosition) // Start from the beginning
+                playWhenReady = true // Auto-play new episode
+                prepare() // Prepare the player
+            }
+        }
+    }
+
     private fun adjustPlayerViewHeight() {
         val playerView = binding.playerView
-
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             playerView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
             binding.imgBack.visibility = View.INVISIBLE
@@ -79,10 +97,12 @@ class MediaPlayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        if (player == null && videoUrl != null) {
+        if (player == null) {
             player = ExoPlayer.Builder(this).build().apply {
-                setMediaItem(MediaItem.fromUri(Uri.parse(videoUrl)))
-                seekTo(playbackPosition) // Bắt đầu từ vị trí phát lại
+                videoUrl?.let {
+                    setMediaItem(MediaItem.fromUri(Uri.parse(it)))
+                }
+                seekTo(playbackPosition) // Resume from saved position
                 playWhenReady = this@MediaPlayerActivity.playWhenReady
                 prepare()
             }
@@ -91,39 +111,36 @@ class MediaPlayerActivity : AppCompatActivity() {
     }
 
     private fun releasePlayer() {
-        player?.let { exoPlayer ->
-            playbackPosition = exoPlayer.currentPosition // Lưu vị trí phát lại
-            playWhenReady = exoPlayer.playWhenReady // Lưu trạng thái đang phát
-            exoPlayer.release()
+        player?.let {
+            playbackPosition = it.currentPosition // Save playback position
+            playWhenReady = it.playWhenReady // Save play state
+            it.release()
             player = null
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putLong("playbackPosition", playbackPosition) // Lưu vị trí phát lại
-        outState.putBoolean("playWhenReady", playWhenReady) // Lưu trạng thái đang phát
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        releasePlayer()
-    }
-
     override fun onStart() {
         super.onStart()
-        initializePlayer()
+        if (player == null) {
+            initializePlayer() // Reinitialize if player is null
+        }
     }
 
     override fun onResume() {
         super.onResume()
         if (player == null) {
             initializePlayer()
+        } else {
+            player?.playWhenReady = playWhenReady
         }
     }
 
     override fun onPause() {
         super.onPause()
+        player?.let {
+            playbackPosition = it.currentPosition // Save current playback position
+            playWhenReady = it.playWhenReady // Save whether video was playing
+        }
         releasePlayer()
     }
 
@@ -132,3 +149,5 @@ class MediaPlayerActivity : AppCompatActivity() {
         releasePlayer()
     }
 }
+
+
