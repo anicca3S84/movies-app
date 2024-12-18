@@ -56,6 +56,17 @@ class NotificationFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        val username = Constants.getUsername(requireContext())
+
+        lifecycleScope.launch {
+            if (username.isNullOrEmpty()) {
+                binding.tvEmptyNotification.text = "Vui lòng đăng nhập để sử dụng tính năng này"
+                binding.tvEmptyNotification.visibility = View.VISIBLE
+                binding.imageEmptyBox.visibility = View.VISIBLE
+                return@launch
+            }
+        }
         viewModel.refreshNotifications()
     }
 
