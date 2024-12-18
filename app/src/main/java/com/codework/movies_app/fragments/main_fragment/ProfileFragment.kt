@@ -21,6 +21,8 @@ import com.codework.movies_app.databinding.FragmentProfileBinding
 import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.viewmodes.ProfileViewModel
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -131,6 +133,13 @@ class ProfileFragment : Fragment() {
 
                         is Resource.Success -> {
                             viewModel.logout()
+                            FirebaseMessaging.getInstance().deleteToken()
+                                .addOnSuccessListener { avoid ->
+                                    Log.d("FCM delete status: ", "Token Deleted")
+                                }
+                                .addOnFailureListener { e -> {
+                                    Log.e("FCM delete status: ", "Failed to delete token", e)
+                                } }
                             val intent =
                                 Intent(requireActivity(), LoginRegisterActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

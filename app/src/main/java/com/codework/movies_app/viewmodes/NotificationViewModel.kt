@@ -66,4 +66,14 @@ class NotificationViewModel @Inject constructor(
             }
         }
     }
+
+    fun markNotificationAsRead(id: Int) {
+        viewModelScope.launch {
+            try {
+                MarsApi.retrofitService.markNotificationAsRead(id)
+            } catch (e: Exception) {
+                Log.e("markNotificationAsRead", "Error: ${e.message}" )
+            }
+        }
+    }
 }

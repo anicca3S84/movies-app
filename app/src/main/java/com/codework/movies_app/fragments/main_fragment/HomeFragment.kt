@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,14 +15,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -34,13 +41,20 @@ import com.codework.movies_app.adapters.ItemAdapter
 import com.codework.movies_app.adapters.ViewPagerAdapter
 import com.codework.movies_app.data.Item
 import com.codework.movies_app.databinding.FragmentHomeBinding
+import com.codework.movies_app.utils.Resource
 import com.codework.movies_app.viewmodes.ItemViewModel
+import com.codework.movies_app.viewmodes.NotificationViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 
-
+@AndroidEntryPoint
 class HomeFragment: Fragment() {
     private lateinit var viewModel: ItemViewModel
+//    private val notificationViewModel: NotificationViewModel by viewModels()
+//    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var binding: FragmentHomeBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemAdapter: ItemAdapter
@@ -58,10 +72,12 @@ class HomeFragment: Fragment() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var handler = Handler(Looper.getMainLooper())
     private var handler2 = Handler(Looper.getMainLooper())
+
     private var autoScrollRunnable = object : Runnable {
         override fun run() {
             val nextItem = (viewPager.currentItem + 1) % (viewPager.adapter?.itemCount ?: 1)
             viewPager.setCurrentItem(nextItem, true)
+
             handler.postDelayed(this, 2000)
         }
     }
@@ -83,6 +99,7 @@ class HomeFragment: Fragment() {
         textChoice4 = binding.textChoice4
         textChoice5 = binding.textChoice5
         textChoice6 = binding.textChoice6
+
         swipeRefreshLayout = binding.swiperefreshlayout
         swipeRefreshLayout.setOnRefreshListener {
             reloadFragment()
@@ -111,6 +128,25 @@ class HomeFragment: Fragment() {
             }
             false
         }
+
+        val dots = arrayOfNulls<ImageView>(5)
+        dots[0] = binding.dotsContainerLayout.dot1
+        dots[1] = binding.dotsContainerLayout.dot2
+        dots[2] = binding.dotsContainerLayout.dot3
+        dots[3] = binding.dotsContainerLayout.dot4
+        dots[4] = binding.dotsContainerLayout.dot5
+
+        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                    for (dot in dots) {
+                        dot?.setImageResource(R.drawable.circle_inactive)
+                    }
+                    dots[position % dots.size]?.setImageResource(R.drawable.circle_active)
+
+            }
+        })
+
         viewModel = ViewModelProvider(this).get(ItemViewModel::class.java)
         viewModel.itemResponse.observe(viewLifecycleOwner, Observer {
                 apiResponse ->
@@ -390,6 +426,7 @@ class HomeFragment: Fragment() {
             }
         }
 
+
     }
 
     override fun onResume() {
@@ -424,6 +461,8 @@ class HomeFragment: Fragment() {
             swipeRefreshLayout.isRefreshing = false  // Stop the refreshing spinner
         }, 1000)
     }
+
+
 
 }
 class CustomItemAnimator : DefaultItemAnimator() {

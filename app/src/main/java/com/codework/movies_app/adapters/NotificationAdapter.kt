@@ -2,23 +2,34 @@ package com.codework.movies_app.adapters
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.codework.movies_app.R
 import com.codework.movies_app.data.Notification
 import com.codework.movies_app.databinding.ItemNotificationBinding
 import com.codework.movies_app.utils.FormatDate
+import com.codework.movies_app.viewmodes.NotificationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
-    inner class NotificationViewHolder(private val binding: ItemNotificationBinding) :
+class NotificationAdapter(private val viewModel: NotificationViewModel) : RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
+    inner class NotificationViewHolder(val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Notification) {
             binding.tvActionType.text = item.actionType
             binding.tvContent.text = item.message
             binding.tvTime.text = FormatDate.formatDate(item.createdAt)
+
+            if(item.read) {
+                binding.tvRead.text = "Đã đọc"
+                binding.notificationCheck.visibility = View.VISIBLE
+            } else {
+                binding.tvRead.text = "Chưa đọc"
+                binding.notificationCheck.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -51,6 +62,12 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.Notificatio
         holder.bind(comment)
 
         holder.itemView.setOnClickListener {
+            if(holder.binding.tvRead.text == "Đã đọc") {
+            } else {
+                holder.binding.tvRead.text = "Đã đọc"
+                holder.binding.notificationCheck.visibility = View.VISIBLE
+            }
+            viewModel.markNotificationAsRead(comment.id)
             onClick?.invoke(comment)
         }
 
@@ -78,5 +95,7 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.Notificatio
     var onLongClick: ((Notification) -> Unit)? = null
 
     var onClick: ((Notification) -> Unit)? = null
+
+
 
 }

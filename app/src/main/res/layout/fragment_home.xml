@@ -124,13 +124,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="256dp">
 
-
                 </androidx.viewpager2.widget.ViewPager2>
+                <include
+                    android:id="@+id/dotsContainerLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/dots_layout"
+                    android:layout_gravity="bottom|end"/>
+            </FrameLayout>
+
+
+
+
+
 
                 <!-- RecyclerView for displaying items in a 2-column grid -->
                 <androidx.recyclerview.widget.RecyclerView
