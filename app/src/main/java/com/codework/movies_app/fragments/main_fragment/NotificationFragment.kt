@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codework.movies_app.activities.MainActivity
 import com.codework.movies_app.adapters.CommentAdapter
 import com.codework.movies_app.adapters.NotificationAdapter
 import com.codework.movies_app.databinding.FragmentNotificationBinding
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 class NotificationFragment : Fragment() {
     private lateinit var binding: FragmentNotificationBinding
     private val viewModel: NotificationViewModel by viewModels()
-    private val notificationAdapter: NotificationAdapter by lazy { NotificationAdapter() }
+    private val notificationAdapter: NotificationAdapter by lazy { NotificationAdapter(viewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +74,7 @@ class NotificationFragment : Fragment() {
                         notificationAdapter.differ.submitList(resource.data) {
                             notificationAdapter.notifyDataSetChanged()
                         }
+                        (requireActivity() as MainActivity).updateNotificationBadge(resource.data?.size ?: 0)
                     }
                     is Resource.Error -> {
                         binding.progressBar.visibility = View.GONE

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#2D2D33">
+    android:background="#2D2D33"
+    android:paddingEnd="8dp">
 
     <TextView
         android:id="@+id/tvActionType"
@@ -40,7 +41,7 @@
         android:textColor="@color/g_gray500"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgTime"
-        app:layout_constraintEnd_toEndOf="@+id/tvContent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imgTime" />
 
     <TextView
@@ -55,9 +56,35 @@
         android:text="Có 1 phim mới cập nhật!"
         android:textColor="@color/g_blue_gray200"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvRead"
         app:layout_constraintStart_toStartOf="@+id/tvActionType"
         app:layout_constraintTop_toBottomOf="@+id/tvActionType" />
+
+    <TextView
+        android:id="@+id/tvRead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã đọc"
+        android:textColor="@color/g_gray500"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@id/notificationCheck"
+        app:layout_constraintTop_toTopOf="@id/notificationCheck"
+        app:layout_constraintBottom_toBottomOf="@id/notificationCheck"
+        android:layout_marginEnd="8dp">
+
+    </TextView>
+    <ImageView
+        android:id="@+id/notificationCheck"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/notification_check"
+        android:contentDescription="noficationCheck"
+        app:layout_constraintTop_toBottomOf="@id/tvTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="visible">
+
+    </ImageView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
