@@ -18,6 +18,7 @@ import com.codework.movies_app.R
 import com.codework.movies_app.adapters.FavFilmAdapter
 import com.codework.movies_app.adapters.HistoryAdapter
 import com.codework.movies_app.databinding.FragmentHistoryBinding
+import com.codework.movies_app.dialogs.deleteAllDialog
 import com.codework.movies_app.dialogs.deleteCommentDialog
 import com.codework.movies_app.utils.Constants
 import com.codework.movies_app.utils.Resource
@@ -126,13 +127,10 @@ class HistoryFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                // Show confirmation dialog before deleting all history
-                deleteCommentDialog(requireContext()) {
+                deleteAllDialog(requireContext()) {
                     lifecycleScope.launch {
-                        // Call the ViewModel to delete all history
                         viewModel.deleteAllHistory(username)
 
-                        // Collect and update UI after deletion
                         viewModel.deleteAllHistory.collectLatest {
                             when (it) {
                                 is Resource.Loading -> {
@@ -231,11 +229,11 @@ class HistoryFragment : Fragment() {
             layoutManager = LinearLayoutManager(
                 requireContext(), LinearLayoutManager.VERTICAL, false
             )
-            addItemDecoration(
-                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-                    setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
-                }
-            )
+//            addItemDecoration(
+//                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+//                    setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
+//                }
+//            )
         }
     }
 }

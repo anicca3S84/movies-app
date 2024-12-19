@@ -200,11 +200,11 @@ class FavoriteFragment : Fragment() {
             layoutManager = LinearLayoutManager(
                 requireContext(), LinearLayoutManager.VERTICAL, false
             )
-            addItemDecoration(
-                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-                    setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
-                }
-            )
+//            addItemDecoration(
+//                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+//                    setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
+//                }
+//            )
         }
     }
 
