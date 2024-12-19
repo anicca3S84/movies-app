@@ -57,6 +57,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRvHistory()
+        binding.layoutQuestion.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_fragmentFAQ)
+        }
 
         binding.layoutHistory.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_historyFragment)

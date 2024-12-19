@@ -16,9 +16,9 @@
            android:layout_height="wrap_content"
            android:text="Thông báo"
            android:layout_marginTop="30dp"
-           android:fontFamily="@font/sf_pro_display"
+           android:textStyle="bold"
            android:textColor="@color/white"
-           android:textSize="26sp"
+           android:textSize="24sp"
            app:layout_constraintStart_toStartOf="@+id/guideline1"
            app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +27,7 @@
            android:id="@+id/rvNotification"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
-           android:layout_marginTop="16dp"
+           android:layout_marginTop="20dp"
            android:visibility="visible"
            app:layout_constraintEnd_toStartOf="@+id/guideline2"
            app:layout_constraintStart_toStartOf="@+id/guideline1"

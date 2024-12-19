@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_profileFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_fragmentFAQ"
+            app:destination="@id/fragmentFAQ" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -133,4 +136,9 @@
             android:id="@+id/action_historyFragment_to_filmDetailFragment"
             app:destination="@id/filmDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentFAQ"
+        tools:layout="@layout/fragment_faq"
+        android:name="com.codework.movies_app.fragments.main_fragment.FragmentFAQ"
+        android:label="FragmentFAQ" />
 </navigation>

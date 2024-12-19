@@ -44,7 +44,8 @@
                     android:layout_marginStart="35dp"
                     android:text="@string/myAccount"
                     android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/imgClose"
                     app:layout_constraintStart_toStartOf="@id/imgClose"
                     app:layout_constraintTop_toTopOf="@id/imgClose" />

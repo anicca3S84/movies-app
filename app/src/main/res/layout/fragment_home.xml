@@ -17,6 +17,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Phimmoi"
+                android:textStyle="bold"
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="24sp"
                 android:gravity="center" />
@@ -24,7 +25,7 @@
                 android:id="@+id/searchView"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="32dp"
+                android:layout_height="35dp"
                 android:queryHint="Search for items"
                 android:layout_marginHorizontal="8dp"
                 android:background="@drawable/rounded_searchview_background"
