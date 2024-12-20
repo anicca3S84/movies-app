@@ -14,3 +14,6 @@ https://github.com/MrCuong11/Movie_BE_Spring
 
 thêm file serviceAccountKey.json ở backend user project (github ko cho push lên) trong thư  mục main/resources
 https://drive.google.com/file/d/1v8PuSDGzVjNL1gug0GARF6QLXHxo5zJR/view?usp=drive_link
+
+database
+add trong project
