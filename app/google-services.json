@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "494784828046",
+    "project_id": "movies-app-ad0c5",
+    "storage_bucket": "movies-app-ad0c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:494784828046:android:2a752fd30fa6daec51afdf",
+        "android_client_info": {
+          "package_name": "com.codework.movies_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-_4AiTz-2sZUi_O_Z10xD3nB_NBnnIWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

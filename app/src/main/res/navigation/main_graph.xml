@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.NotificationFragment"
+        android:label="DownloadFragment"
+        tools:layout="@layout/fragment_notification">
+        <action
+            android:id="@+id/action_notificationFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.FavoriteFragment"
+        android:label="FavoriteFragment"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_favoriteFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment"
+            app:enterAnim="@anim/from_left" />
+        <action
+            android:id="@+id/action_profileFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_fragmentFAQ"
+            app:destination="@id/fragmentFAQ" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_movieDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment"
+            app:enterAnim="@anim/from_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/fade_in"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_searchFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment"
+            app:enterAnim="@anim/from_right"/>
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/fade_in"/>
+    </fragment>
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.codework.movies_app.fragments.settings.UserAccountFragment"
+        android:label="UserAccountFragment"
+        tools:layout="@layout/fragment_user_account">
+        <action
+            android:id="@+id/action_userAccountFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/from_right" />
+        <argument
+            android:name="user"
+            app:argType="com.codework.movies_app.data.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/filmDetailFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.FilmDetailFragment"
+        android:label="FilmDetailFragment"
+        tools:layout="@layout/fragment_film_detail">
+        <action
+            android:id="@+id/action_filmDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/from_top"
+            app:exitAnim="@anim/to_bottom"
+            app:popEnterAnim="@anim/from_bottom"
+            app:popExitAnim="@anim/to_top" />
+        <action
+            android:id="@+id/action_filmDetailFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment"
+            app:enterAnim="@anim/from_bottom" />
+        <argument
+            android:name="slug"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_filmDetailFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_media_player"
+        android:id="@+id/mediaPlayerFragment"
+        android:name="com.codework.movies_app.fragments.main_fragment.MediaPlayerFragment"
+        android:label="MediaPlayerFragment" >
+        <action
+            android:id="@+id/action_mediaPlayerFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment"
+            app:enterAnim="@anim/from_top" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment2"
+        tools:layout="@layout/fragment_login"
+        android:name="com.codework.movies_app.fragments.login_register.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/historyFragment"
+        tools:layout="@layout/fragment_history"
+        android:name="com.codework.movies_app.fragments.main_fragment.HistoryFragment"
+        android:label="HistoryFragment" >
+        <action
+            android:id="@+id/action_historyFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentFAQ"
+        tools:layout="@layout/fragment_faq"
+        android:name="com.codework.movies_app.fragments.main_fragment.FragmentFAQ"
+        android:label="FragmentFAQ" />
+</navigation>
